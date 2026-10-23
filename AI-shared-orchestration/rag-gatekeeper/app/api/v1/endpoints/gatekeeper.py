@@ -3,7 +3,9 @@
 import time
 import uuid
 from datetime import date
+from typing import Any, Dict, Optional
 from fastapi import APIRouter
+from pydantic import BaseModel, Field
 from app.adapters.embedding.bge_m3_adapter import get_embedder
 from app.adapters.llm import get_llm_provider
 from app.adapters.vectorstore.qdrant_adapter import get_qdrant_adapter
@@ -184,4 +186,39 @@ async def process_input(payload: ProcessInputRequest) -> ProcessInputResponse:
         node_7_augmented_prompt=node_7,
         temporal_payload=temporal_contract,
     )
+
+
+class RetrieveDocumentsRequest(BaseModel):
+    """Request contract for POST /api/v1/gatekeeper/retrieve."""
+
+    query: str = Field(..., min_length=1)
+    collection: Optional[str] = Field(default=None)
+    limit: int = Field(default=3, ge=1, le=20)
+
+
+@router.post("/retrieve")
+async def retrieve_knowledge(payload: RetrieveDocumentsRequest) -> Dict[str, Any]:
+    """Semantic k-NN retrieval from Qdrant knowledge base (hadirin_documents)."""
+    start = time.perf_counter()
+    settings = get_settings()
+    embedder = get_embedder()
+    qdrant = get_qdrant_adapter()
+
+    target_collection = payload.collection or settings.QDRANT_COLLECTION_HADIRIN_DOCS
+    query_vec = embedder.embed_text(payload.query)
+    hits = qdrant.search_similar(
+        collection_name=target_collection,
+        query_vector=query_vec,
+        limit=payload.limit,
+    )
+    elapsed_ms = round((time.perf_counter() - start) * 1000, 2)
+    return {
+        "status": "success",
+        "collection": target_collection,
+        "query": payload.query,
+        "count": len(hits),
+        "latency_ms": elapsed_ms,
+        "results": hits,
+    }
+
 

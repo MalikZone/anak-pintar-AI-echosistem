@@ -1,0 +1,27 @@
+{
+  "domain": "lisa",
+  "version": "1.0.0",
+  "description": "Kamus pengetahuan awal investasi emas & glosarium LISA untuk koleksi Qdrant lisa_intents.",
+  "intents": [
+    {
+      "intent": "GOLD_PRICE_CHECK",
+      "is_actionable": true,
+      "target_workflow": "GoldPriceInquiryWorkflow",
+      "phrases": [
+        "Berapa harga emas Antam hari ini per gram dan spread buyback-nya?",
+        "Update harga emas batangan hari ini naik atau turun ya?",
+        "Apakah sekarang waktu yang tepat untuk beli emas atau tunggu koreksi?"
+      ]
+    },
+    {
+      "intent": "PORTFOLIO_SIMULATION",
+      "is_actionable": true,
+      "target_workflow": "PortfolioProjectionWorkflow",
+      "phrases": [
+        "Simulasikan target tabungan emas saya 50 gram dalam 3 tahun ke depan",
+        "Berapa nilai portofolio emas saya saat ini berdasarkan harga buyback terbaru?"
+      ]
+    }
+  ]
+}
+

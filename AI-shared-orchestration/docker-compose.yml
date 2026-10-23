@@ -86,6 +86,47 @@ services:
     networks:
       - orchestration-net
 
+  # ===========================================================================
+  # 5. RAG GATEKEEPER SERVICE (FastAPI Intent & Context Fusion Layer - Port 8000)
+  # REST API: http://localhost:8000
+  # ===========================================================================
+  rag-gatekeeper:
+    build:
+      context: ./rag-gatekeeper
+      dockerfile: Dockerfile
+    container_name: anakpintar-rag-gatekeeper
+    restart: unless-stopped
+    depends_on:
+      - qdrant
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=AI-Shared-Orchestration-Gatekeeper
+      - APP_ENV=production
+      - GATEKEEPER_HOST=0.0.0.0
+      - GATEKEEPER_PORT=8000
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - QDRANT_GRPC_PORT=6334
+      - QDRANT_COLLECTION_HADIRIN_INTENTS=hadirin_intents
+      - QDRANT_COLLECTION_HADIRIN_DOCS=hadirin_documents
+      - QDRANT_COLLECTION_LISA_INTENTS=lisa_intents
+      - EMBEDDING_MODEL_NAME=BAAI/bge-m3
+      - EMBEDDING_DIMENSION=1024
+      - LLM_PROVIDER=mock
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434/v1
+      - OLLAMA_MODEL=qwen2.5:7b
+      - HADIRIN_DB_HOST=host.docker.internal
+      - HADIRIN_DB_PORT=3306
+      - HADIRIN_DB_USER=root
+      - HADIRIN_DB_PASSWORD=likliklik
+      - HADIRIN_DB_NAME=hadirin
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - orchestration-net
+
+
 volumes:
   qdrant_storage:
     name: anakpintar_qdrant_storage

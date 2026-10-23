@@ -15,6 +15,8 @@ import holidayRoutes from './holidayRoutes.js';
 import leaveTypeRoutes from './leaveTypeRoutes.js';
 import attendanceCorrectionRoutes from './attendanceCorrectionRoutes.js';
 import notificationRoutes from './notificationRoutes.js';
+import assistantRoutes from './assistantRoutes.js';
+import telegramWebhookRoutes from '../interfaces/telegram/telegramWebhookRoutes.js';
 
 const router = Router();
 
@@ -45,6 +47,8 @@ router.use('/holidays', holidayRoutes);
 router.use('/leave-types', leaveTypeRoutes);
 router.use('/attendance-corrections', attendanceCorrectionRoutes);
 router.use('/notifications', notificationRoutes);
+router.use('/assistant', assistantRoutes);
+router.use('/telegram', telegramWebhookRoutes);
 
 export default router;
 

@@ -73,3 +73,7 @@ Thumbs.db
 *.sln
 *.sw?
 
+# --- 7. Local Operational Notes ---
+service must running/
+
+

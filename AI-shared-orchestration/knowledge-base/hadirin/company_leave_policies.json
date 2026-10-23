@@ -1,0 +1,57 @@
+{
+  "domain": "hadirin",
+  "version": "1.0.0",
+  "description": "Katalog Dokumen Pengetahuan SOP HR, Peraturan Perusahaan & Regulasi Ketenagakerjaan (Depnaker) untuk Koleksi Qdrant hadirin_documents.",
+  "documents": [
+    {
+      "doc_id": "SOP-HR-001",
+      "title": "Kebijakan Hak Cuti Tahunan (Annual Leave Policy)",
+      "category": "LEAVE_POLICY",
+      "tenant_id": "GLOBAL",
+      "content": "Setiap karyawan tetap dan kontrak berhak atas kuota Cuti Tahunan (Annual Leave) sebanyak 12 hari kerja per tahun kalender. Pengajuan cuti tahunan wajib diajukan minimal H-3 sebelum tanggal pelaksanaan melalui aplikasi web Hadirin atau chat grup Telegram resmi (otomatis terdeteksi dari users.telegram_id). Persetujuan mengikuti alur berjenjang 2 tahap: Tahap 1 oleh Atasan Langsung (Leader) dan Tahap 2 pengesahan akhir oleh HR Admin. Kuota cuti tahunan baru dipotong secara atomik setelah HR Admin memberikan persetujuan final."
+    },
+    {
+      "doc_id": "SOP-HR-002",
+      "title": "Prosedur Izin Sakit & Kewajiban Surat Keterangan Dokter (Sick Leave Policy)",
+      "category": "SICK_LEAVE_POLICY",
+      "tenant_id": "GLOBAL",
+      "content": "Karyawan yang berhalangan hadir karena sakit wajib menginformasikan kepada Leader atau melalui grup Telegram paling lambat sebelum jam mulai shift kerja. Kuota dasar izin sakit adalah 14 hari per tahun dan tidak memotong kuota cuti tahunan. Apabila izin sakit berlangsung lebih dari 1 hari (2 hari berturut-turut atau lebih), karyawan WAJIB melampirkan Surat Keterangan Dokter (SKD) resmi dari klinik atau rumah sakit untuk diverifikasi oleh HR Admin."
+    },
+    {
+      "doc_id": "SOP-HR-003",
+      "title": "Aturan Kerja Lembur & Surat Perintah Lembur (Overtime & SPL Regulation)",
+      "category": "OVERTIME_POLICY",
+      "tenant_id": "GLOBAL",
+      "content": "Sesuai regulasi Ketenagakerjaan (PP No. 35 Tahun 2021), waktu kerja lembur hanya dapat dilakukan dengan Surat Perintah Lembur (SPL) yang disetujui. Batas maksimal jam lembur adalah 4 jam dalam 1 hari kerja dan maksimal 14 jam dalam 1 minggu (tidak termasuk lembur pada hari istirahat mingguan atau hari libur nasional). Jam lembur tidak boleh bentrok dengan jadwal shift aktif karyawan."
+    },
+    {
+      "doc_id": "SOP-HR-004",
+      "title": "Aturan Pertukaran Jadwal Shift (Dynamic Roster & Shift Swap)",
+      "category": "ROSTER_POLICY",
+      "tenant_id": "GLOBAL",
+      "content": "Karyawan yang beroperasi dengan pola shift bergilir (Shift Pagi, Shift Sore, Shift Malam/Lintas Hari) dapat mengajukan permohonan tukar shift (Shift Swap) minimal H-1 sebelum jadwal berlangsung. Permohonan tukar shift wajib disetujui oleh Team Leader untuk memastikan kapasitas operasional cabang tetap terpenuhi dan tidak melanggar waktu istirahat antar-shift minimal 11 jam."
+    },
+    {
+      "doc_id": "SOP-HR-005",
+      "title": "Kebijakan Presensi Geofencing & Koreksi Absensi (Attendance & Correction)",
+      "category": "ATTENDANCE_POLICY",
+      "tenant_id": "GLOBAL",
+      "content": "Presensi Clock-In dan Clock-Out wajib dilakukan di dalam radius geofence lokasi cabang penugasan karyawan (umumnya 50m hingga 150m dari titik koordinat cabang) beserta verifikasi swafoto (selfie). Toleransi keterlambatan (grace period) standar adalah 15 menit dari jam masuk shift. Jika karyawan lupa melakukan Clock-In atau Clock-Out, karyawan dapat mengajukan Koreksi Presensi disertai alasan valid yang harus disetujui oleh Leader dan disahkan oleh HR Admin."
+    },
+    {
+      "doc_id": "SOP-HR-006",
+      "title": "Prinsip Segregation of Duties (Anti Self-Approval) & Isolasi Multi-Tenant",
+      "category": "GOVERNANCE_SECURITY",
+      "tenant_id": "GLOBAL",
+      "content": "Sistem Hadirin menerapkan Segregation of Duties (SoD) secara ketat: seorang karyawan atau Leader dilarang keras menyetujui pengajuan cuti, lembur, atau koreksi presensi miliknya sendiri. Apabila pemohon adalah seorang Leader, pengajuan otomatis dieskalasi ke Manager di atasnya atau langsung ke HR Admin. Seluruh data karyawan, kuota cuti, dan log presensi terisolasi mutlak berdasarkan tenant_id dan diverifikasi secara deterministik melalui users.telegram_id."
+    },
+    {
+      "doc_id": "SOP-HR-007",
+      "title": "Kebijakan Cuti Khusus / Izin Penting Berbayar (Special Paid Leave)",
+      "category": "SPECIAL_LEAVE_POLICY",
+      "tenant_id": "GLOBAL",
+      "content": "Sesuai Undang-Undang Ketenagakerjaan, karyawan berhak atas cuti khusus berbayar yang TIDAK memotong kuota cuti tahunan untuk peristiwa penting: (1) Pernikahan karyawan sendiri: 3 hari, (2) Pernikahan anak kandung: 2 hari, (3) Kelahiran anak / Istri melahirkan atau keguguran: 2 hari, (4) Khitanan atau pembaptisan anak: 2 hari, (5) Kematian suami/istri, orang tua/mertua, atau anak/menantu: 2 hari, (6) Kematian anggota keluarga dalam satu rumah: 1 hari."
+    }
+  ]
+}
+

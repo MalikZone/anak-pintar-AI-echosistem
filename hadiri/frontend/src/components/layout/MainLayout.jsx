@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ShieldAlert, ArrowLeftRight } from 'lucide-react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import BottomNav from './BottomNav';
+import AiCopilotDrawer from './AiCopilotDrawer';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 
 export default function MainLayout() {
   const { isImpersonating, stopImpersonating, tenant, user } = useAuth();
   const { t } = useLanguage();
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+
+  useEffect(() => {
+    const handleToggle = () => setIsCopilotOpen((prev) => !prev);
+    const handleOpen = () => setIsCopilotOpen(true);
+    const handleClose = () => setIsCopilotOpen(false);
+
+    window.addEventListener('toggle-ai-copilot', handleToggle);
+    window.addEventListener('open-ai-copilot', handleOpen);
+    window.addEventListener('close-ai-copilot', handleClose);
+
+    return () => {
+      window.removeEventListener('toggle-ai-copilot', handleToggle);
+      window.removeEventListener('open-ai-copilot', handleOpen);
+      window.removeEventListener('close-ai-copilot', handleClose);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
@@ -58,6 +76,12 @@ export default function MainLayout() {
 
       {/* Mobile Bottom Navigation */}
       <BottomNav />
+
+      {/* AI Copilot Drawer Component */}
+      <AiCopilotDrawer
+        isOpen={isCopilotOpen}
+        onClose={() => setIsCopilotOpen(false)}
+      />
 
     </div>
   );

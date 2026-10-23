@@ -15,3 +15,4 @@ export { holidayApi } from './holidayApi';
 export { leaveTypeApi } from './leaveTypeApi';
 export { notificationApi } from './notificationApi';
 export { attendanceCorrectionApi } from './attendanceCorrectionApi';
+export { assistantApi } from './assistantApi';

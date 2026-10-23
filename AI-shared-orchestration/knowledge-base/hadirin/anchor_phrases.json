@@ -1,0 +1,134 @@
+{
+  "domain": "hadirin",
+  "version": "1.0.0",
+  "description": "Kamus frase jangkar (anchor phrases) percakapan informal grup Telegram & Web Chat untuk klasifikasi intensi semantik Hadirin HR.",
+  "intents": [
+    {
+      "intent": "ANNUAL_LEAVE_REQUEST",
+      "is_actionable": true,
+      "target_workflow": "LeaveRequestWorkflow",
+      "action": "TRIGGER_WORKFLOW",
+      "phrases": [
+        "Pak Bambang, saya mau izin cuti tahunan tanggal 24 dan 25 Oktober besok ada acara nikahan adik di Jogja",
+        "Izin mengajukan cuti tahunan 2 hari mulai besok karena ada urusan keluarga di luar kota",
+        "Komandan, saya ambil cuti tanggal 10 sampai 12 bulan ini ya buat acara lamaran keluarga",
+        "Halo HR, saya mau request annual leave hari Jumat besok 1 hari untuk mengurus paspor",
+        "Pak, besok lusa saya izin tidak masuk kerja pakai kuota cuti tahunan ya ada wisuda anak",
+        "Permisi pak leader, mau ajukan cuti 3 hari minggu depan untuk pulang kampung ke Semarang",
+        "Saya mau pakai sisa hak cuti tahunan saya tanggal 15 Oktober untuk keperluan pribadi",
+        "Izin cuti sehari besok ya pak, mau nemenin orang tua kontrol ke luar kota",
+        "Boleh minta izin cuti tahunan hari Senin dan Selasa depan pak? Ada acara syukuran rumah",
+        "Applying for 2 days of annual leave next Thursday and Friday for a family wedding event"
+      ]
+    },
+    {
+      "intent": "SICK_LEAVE_REPORT",
+      "is_actionable": true,
+      "target_workflow": "LeaveRequestWorkflow",
+      "action": "TRIGGER_WORKFLOW",
+      "phrases": [
+        "Pagi pak, hari ini saya izin sakit demam tinggi dan sedang periksa ke klinik dokter",
+        "Mohon izin tidak bisa masuk kerja hari ini karena sakit tipes dan disuruh istirahat 2 hari oleh dokter",
+        "Komandan, badan saya meriang dan flu berat sejak semalam, hari ini izin sakit dulu ya surat dokter menyusul",
+        "Halo tim HR, saya izin sakit perut diare akut hari ini belum bisa ngantor, ini lagi di IGD",
+        "Pak leader, saya izin sakit 2 hari tanggal 23 dan 24 Oktober, lampiran surat keterangan dokter sudah ada",
+        "Maaf pak hari ini saya tidak kuat berangkat shift pagi karena vertigo kambuh dan pusing berat",
+        "Izin sakit ya pak hari ini, suara habis dan radang tenggorokan, nanti siang saya kirim foto surat dokternya",
+        "Saya sedang dirawat opname di rumah sakit karena demam berdarah, mohon izin sakit beberapa hari ke depan",
+        "Hari ini saya izin tidak hadir karena sakit gigi bengkak dan harus tindakan ke dokter gigi",
+        "I am feeling unwell with high fever today and visiting the clinic, requesting sick leave for today"
+      ]
+    },
+    {
+      "intent": "OVERTIME_CLAIM",
+      "is_actionable": true,
+      "target_workflow": "OvertimeWorkflow",
+      "action": "TRIGGER_WORKFLOW",
+      "phrases": [
+        "Pak saya ajukan lembur SPL malam ini 3 jam dari jam 17:00 sampai 20:00 untuk deployment server produksi",
+        "Izin klaim lembur hari ini 2 jam setelah jam pulang karena menyelesaikan tutup buku akhir bulan",
+        "Komandan, mohon persetujuan surat perintah lembur (SPL) besok Sabtu 4 jam untuk maintenance jaringan cabang",
+        "Saya lanjut kerja lembur sampai jam 9 malam ini ya pak buat beresin laporan audit pajak",
+        "Tolong catat pengajuan overtime saya hari ini dari pukul 17:00 s/d 21:00 karena ada pengiriman barang mendadak",
+        "Pak leader, tim gudang lembur 3 jam sore ini untuk bongkar muat kontainer yang baru sampai",
+        "Mengajukan klaim jam lembur kerja ekstra 2.5 jam kemarin malam karena perbaikan bug kritis",
+        "Requesting 3 hours overtime approval tonight from 17:00 to 20:00 to complete the quarterly release"
+      ]
+    },
+    {
+      "intent": "SHIFT_SWAP_REQUEST",
+      "is_actionable": true,
+      "target_workflow": "ShiftSwapWorkflow",
+      "action": "TRIGGER_WORKFLOW",
+      "phrases": [
+        "Izin komandan, saya mau tukar shift pagi besok sama Budi karena ada urusan pagi di bank",
+        "Pak leader, boleh saya ganti jadwal shift malam tanggal 26 Oktober jadi shift siang? Riko sudah setuju tukeran",
+        "Permohonan tukar shift kerja hari Sabtu ini dari Shift 1 Pagi ke Shift 2 Sore dengan Andi",
+        "Saya mau ajukan switch shift untuk besok lusa karena ada jadwal kuliah malam",
+        "Pak, besok saya tukeran jadwal jaga cabang sama Sinta ya, saya ambil shift sore dia ambil shift pagi",
+        "Mohon izin pindah shift dari shift reguler ke shift malam khusus hari Jumat besok",
+        "Can I swap my morning shift tomorrow with Budi's afternoon shift?"
+      ]
+    },
+    {
+      "intent": "ATTENDANCE_STATUS_QUERY",
+      "is_actionable": true,
+      "target_workflow": null,
+      "action": "DIRECT_QUERY_RESPONSE",
+      "phrases": [
+        "Halo min, sisa kuota cuti tahunan saya tahun ini tinggal berapa hari ya?",
+        "Tolong cek riwayat absen dan jam clock in saya hari ini sudah tercatat belum?",
+        "Berapa sisa saldo hak cuti saya sekarang di sistem Hadirin?",
+        "Pak, bulan ini saya tercatat terlambat masuk berapa kali ya di rekap presensi?",
+        "Cek status pengajuan cuti saya minggu lalu apakah sudah di-approve oleh Leader dan HR?",
+        "Jam masuk dan jam pulang shift saya hari ini jadwalnya jam berapa ya?",
+        "How many remaining annual leave days do I have left this year?"
+      ]
+    },
+    {
+      "intent": "POLICY_HR_QUERY",
+      "is_actionable": true,
+      "target_workflow": null,
+      "action": "RAG_KNOWLEDGE_RESPONSE",
+      "phrases": [
+        "Bagaimana aturan SOP pengajuan izin sakit lebih dari 2 hari di perusahaan?",
+        "Berapa batas maksimal jam lembur karyawan dalam satu minggu menurut peraturan perusahaan?",
+        "Kalau lupa clock out kemarin sore cara ajukan koreksi presensinya bagaimana ya?",
+        "Apakah izin menikah atau anggota keluarga meninggal memotong kuota cuti tahunan?",
+        "Berapa meter batas radius geofence maksimal untuk absen clock in di kantor cabang?",
+        "Apa syarat wajib kalau mau klaim lembur SPL di hari libur nasional?"
+      ]
+    },
+    {
+      "intent": "FACILITY_CHATTER",
+      "is_actionable": false,
+      "target_workflow": null,
+      "action": "IGNORE_NOISE",
+      "phrases": [
+        "pagi all, dispenser air galon di pantry lantai 2 habis ya tolong diganti",
+        "tolong teknisi ac segera datang ke ruang rapat lantai 3 ya pendinginnya mati panas banget",
+        "wifi kantor di lantai 2 kok lemot banget ya dari tadi pagi susah konek",
+        "lampu toilet pria di dekat lobby kedap-kedip mohon bagian GA dicek",
+        "parkiran motor di basement sudah penuh banget pagi ini",
+        "mesin kopi di pantry lagi error jangan dipakai dulu ya teman-teman",
+        "siapa yang naruh helm hitam di atas meja resepsionis depan?"
+      ]
+    },
+    {
+      "intent": "CASUAL_CHATTER",
+      "is_actionable": false,
+      "target_workflow": null,
+      "action": "IGNORE_NOISE",
+      "phrases": [
+        "Selamat pagi teman-teman semua semoga lancar dan berkah kerjaan hari ini",
+        "Siang guys, makan siang hari ini pada mau pesan nasi padang atau bakso?",
+        "Terima kasih banyak pak arahannya siap dilaksanakan",
+        "Oke siap komandan mantap lanjutkan!",
+        "Selamat ulang tahun ya bro semoga sehat dan sukses selalu",
+        "Sore nanti habis pulang kantor jadi main futsal bareng nggak?",
+        "Alhamdulillah akhirnya hari Jumat juga selamat berakhir pekan semuanya"
+      ]
+    }
+  ]
+}
+

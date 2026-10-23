@@ -181,6 +181,17 @@ export default function Navbar() {
               <NotificationDropdown />
             </div>
 
+            {/* AI Copilot Quick Launch Button */}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('toggle-ai-copilot'))}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 hover:shadow-indigo-500/30 transition-all cursor-pointer shrink-0"
+              title="Hadirin AI Copilot"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-200 animate-pulse" />
+              <span className="hidden sm:inline">AI Copilot</span>
+            </button>
+
             {/* User Profile Mini Badge */}
             <Link
               to={isHrAdmin || isSuperAdmin ? '/admin/profile' : '/employee/profile'}

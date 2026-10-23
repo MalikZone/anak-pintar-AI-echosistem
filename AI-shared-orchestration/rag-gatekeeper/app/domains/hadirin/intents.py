@@ -182,12 +182,16 @@ def apply_hadirin_intent_guardrails(
     ):
         scores["FACILITY_CHATTER"] = max(scores.get("FACILITY_CHATTER", 0.0), 0.8854)
 
-    # Sick leave vs Annual leave disambiguation
-    if any(w in clean_text for w in ["sakit", "demam", "dokter", "klinik", "opname", "rawat", "flu", "pusing"]):
-        if "aturan" not in clean_text and "sop" not in clean_text:
-            scores["SICK_LEAVE_REPORT"] = max(scores.get("SICK_LEAVE_REPORT", 0.0), 0.8950)
+    # Policy & SOP queries vs actual request
+    if any(w in clean_text for w in ["aturan", "sop", "syarat", "kebijakan", "peraturan", "ketentuan", "apakah boleh"]):
+        scores["POLICY_HR_QUERY"] = max(scores.get("POLICY_HR_QUERY", 0.0), 0.8880)
+    # Sick leave vs Annual leave vs Overtime disambiguation
+    elif any(w in clean_text for w in ["sakit", "demam", "dokter", "klinik", "opname", "rawat", "flu", "pusing"]):
+        scores["SICK_LEAVE_REPORT"] = max(scores.get("SICK_LEAVE_REPORT", 0.0), 0.8950)
+    elif any(w in clean_text for w in ["lembur", "spl", "overtime"]):
+        scores["OVERTIME_CLAIM"] = max(scores.get("OVERTIME_CLAIM", 0.0), 0.8920)
     elif any(w in clean_text for w in ["cuti", "izin", "nikahan", "acara", "pulang kampung", "mudik"]):
-        if "sisa" not in clean_text and "berapa" not in clean_text and "aturan" not in clean_text:
+        if "sisa" not in clean_text and "berapa" not in clean_text:
             scores["ANNUAL_LEAVE_REQUEST"] = max(scores.get("ANNUAL_LEAVE_REQUEST", 0.0), 0.8921)
 
     # Sort candidates by score descending

@@ -99,6 +99,11 @@ class MockLLMProvider(BaseLLMProvider):
             start_dt = today
             end_dt = today
 
+        duration_match = re.search(r"(\d{1,2})\s*hari", lower_text)
+        if duration_match and not range_match and len(iso_matches) < 2:
+            parsed_days = max(1, int(duration_match.group(1)))
+            end_dt = start_dt + timedelta(days=parsed_days - 1)
+
         total_days = max(1, (end_dt - start_dt).days + 1)
 
         # 3. Extract clean reason
@@ -111,13 +116,15 @@ class MockLLMProvider(BaseLLMProvider):
                     reason = extracted[0].upper() + extracted[1:]
                     break
 
-        if intent == "OVERTIME_CLAIM":
+        if intent in ("OVERTIME_CLAIM", "OVERTIME_REQUEST"):
+            hours_match = re.search(r"(\d+(?:\.\d+)?)\s*jam", lower_text)
+            duration_hours = float(hours_match.group(1)) if hours_match else 3.0
             return {
                 "overtime_type": "WORKDAY",
                 "date": start_dt.isoformat(),
                 "start_time": "17:00",
                 "end_time": "20:00",
-                "duration_hours": 3.0,
+                "duration_hours": duration_hours,
                 "reason": reason,
                 "provider": "mock_provider",
             }
