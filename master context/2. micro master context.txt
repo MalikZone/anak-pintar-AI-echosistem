@@ -1,0 +1,136 @@
+Berikut adalah **Master Context** yang dirancang sebagai *blueprint* ekosistem AI asisten Anda. Dokumen ini dibagi menjadi dua format: **Versi Gabungan (Ecosystem Blueprint)** untuk melihat gambaran besar arsitektur global, dan **Versi Spesifik Per Proyek** (`lisa` dan `catetin`) untuk diumpankan langsung ke agen AI atau Google Antigravity saat Anda mulai membangun kodenya.
+
+---
+
+# BAGIAN 1: Master Context Ekosistem AI (Versi Gabungan / Blueprint Global)
+
+> **Tujuan Dokumen:** Blueprint arsitektur tingkat makro untuk ekosistem AI asisten multi-proyek (*Polyrepo Architecture*) yang mengintegrasikan layanan mandiri, kontrol akses berbasis identitas, dan *Shared AI Core*.
+
+```text
++---------------------------------------------------------------------------------------------------+
+|                                        WORKSPACE ROOT                                             |
+|                                                                                                   |
+|   +---------------+   +---------------+   +---------------+   +---------------+   +-----------+   |
+|   |     lisa      |   |    catetin    |   |    hadirin    |   |     loka      |   |  ...dst   |   |
+|   |  (Gold Bot)   |   | (POS SaaS)    |   | (AI Absensi)  |   | (E-commerce)  |   | (Proyek N)|   |
+|   +---------------+   +---------------+   +---------------+   +---------------+   +-----------+   |
+|     |           |       |           |       |           |       |           |                   	|
+|   [Frontend]  [Backend] [Frontend]  [Backend] [Frontend]  [Backend] [Frontend]  [Backend]           |
+|     |           |       |           |       |           |       |           |                   |
+|   [Database 1]        [Database 2]        [Database 3]        [Database 4]    [Database N]        |
++---------------------------------------------------------------------------------------------------+
+                                                      ^
+                                                      |
+                                      [ Shared AI Core / Google AI Plus ]
+
+```
+
+### 1. Visi & Prinsip Desain Ekosistem
+
+* **Polyrepo & Micro-Modular:** Setiap proyek (`lisa`, `catetin`, dll.) berdiri di folder mandiri dengan *frontend*, *backend*, dan *database* terisolasi guna menghindari *tight coupling* dan mempermudah *scaling* mandiri.
+* **Human-in-the-Loop (HITL) by Design:** AI dirancang murni sebagai **asisten cerdas / penasihat (*advisor/copilot*)**, BUKAN sebagai pengambil keputusan otomatis (*autonomous decision maker*). Keputusan transaksional, modifikasi data permanen, dan aksi finansial selalu berada di bawah kendali mutlak pengguna manusia.
+* **AI Orchestration Layer (Guardrail & Context Engine):** Menjadi perantara aman (*secure intermediary*) antara backend dan model AI (Google Gemini API). Layer ini bertindak sebagai *firewall kontekstual* yang memvalidasi hak akses data (`user_id` / `tenant_id`), menyaring prompt (*input guardrail*), memastikan isolasi data, serta memverifikasi keluaran model (*output guardrail*) agar tidak mengeksekusi perintah berbahaya secara liar.
+* **Temporal Workflow Orchestration:** Setiap sub-proyek mengimplementasikan **Temporal.io** untuk menangani *durable execution*, penjadwalan periodik (*cron/scheduled jobs*), proses asinkronus multi-langkah, dan *fault-tolerant pipelines* (seperti polling harga, rekap performa otomatis, evaluasi target, dan restock reminder) tanpa risiko kehilangan state saat server restart.
+* **Domain-Specific RAG Engine (Retrieval-Augmented Generation):** Masing-masing proyek memiliki pipeline RAG mandiri yang didukung oleh `pgvector` di PostgreSQL lokal. RAG mengambil data kontekstual yang relevan (data historis, dokumen pedoman, berita pasar, katalog produk) untuk diinjeksikan ke prompt Gemini, memastikan seluruh keluaran analisis akurat, berbasis data faktual, dan terhindar dari halusinasi.
+* **Shared AI Core:** Seluruh proyek memanfaatkan sumber daya komputasi dan model cerdas dari ekosistem **Google AI Plus / Gemini API** yang dipayungi oleh AI Orchestration Layer.
+* **Strict Multi-User & Multi-Tenant Security:** Setiap proyek wajib mengimplementasikan pemisahan data mutlak berbasis `user_id` atau `tenant_id` dari tingkat *database*, *vector embeddings RAG*, hingga integrasi *Telegram Webhook*.
+
+### 2. Alur Komponen Global
+
+1. **Client Layer:** Pengguna berinteraksi melalui dua kanal utama—*Web Dashboard (Frontend)* untuk manajemen akun & visualisasi grafik, serta *Telegram Chat* untuk asisten cepat.
+2. **Backend & Workflow Layer:** Layanan backend memproses permintaan dan mendelegasikan tugas berdurasi panjang/terjadwal ke **Temporal Workflow Engine**.
+3. **RAG & Knowledge Retrieval Layer:** Sebelum prompt dibuat, RAG Engine mengekstrak informasi faktual relevan dari basis data vektor terisolasi (`pgvector`) sesuai hak akses `user_id` / `tenant_id`.
+4. **AI Orchestration Layer (Guardrail & Context Engine):** Memeriksa keamanan input (*guardrail*), menggabungkan konteks RAG dengan prompt pengguna, dan mengirimkannya ke Google Gemini API.
+5. **Storage Layer:** Masing-masing proyek memiliki *Database PostgreSQL* terdedikasi (Database-per-Service + `pgvector`) untuk menjamin privasi data dan isolasi vektor secara total.
+
+---
+
+---
+
+# BAGIAN 2: Master Context Spesifik Proyek (Project-Specific Contexts)
+
+## 2.1. Master Context Proyek `lisa` (Analisis Pasar Emas, Personal Portfolio & Proyeksi Investasi)
+
+> **Tujuan Dokumen:** Konteks spesifik untuk agen AI dalam membangun, merawat, dan mengembangkan proyek `lisa`.
+
+### A. Deskripsi & Fitur Utama Proyek
+
+Aplikasi asisten AI personal/komunitas untuk memantau harga emas, menganalisis waktu terbaik untuk beli/jual/simpan, serta terintegrasi dengan Telegram Bot dan Web Dashboard.
+
+**Fitur & Modul Utama `lisa`:**
+1. **Market Analysis & Smart Recommendation:** Analisis harga pasar real-time dan historis, rekomendasi aksi beli/jual/simpan (*hold*) berbasis penalaran AI Gemini.
+2. **Pencatatan Portofolio Personal:** Pencatatan aset emas fisik/digital (gramasi, harga beli rata-rata, total modal, nilai aset saat ini, dan akumulasi untung/rugi).
+3. **Target Investasi Tahunan:** Pengguna dapat menetapkan target akumulasi investasi tahunan (misal: target gramasi emas atau target valuasi aset per tahun) lengkap dengan *progress tracking* dan pengingat via Telegram Bot.
+4. **Analisis Kenaikan Persentase Nilai (Value Appreciation):** Metrik kalkulasi pertumbuhan nilai portofolio berkala (kenaikan harga emas YoY %, ROI berjalan, dan komparasi terhadap laju inflasi).
+5. **Prediksi & Proyeksi Nilai Investasi (3, 5, dan 10 Tahun):** Simulasi dan proyeksi prediktif pertumbuhan nilai portofolio ke depan (horizon 3 tahun, 5 tahun, dan 10 tahun) berbasis parameter dinamis:
+   * Parameter laju apresiasi tahunan emas (CAGR historis dengan opsi skenario: Konservatif, Moderat, Optimis).
+   * Parameter rutinitas akumulasi (*Dollar Cost Averaging* / tabungan emas rutin bulanan atau tahunan).
+   * Parameter inflasi dan faktor risiko pasar.
+
+### B. Arsitektur Folder `lisa/`
+
+```text
+lisa/
+├── backend/                  <-- REST API, Telegram Webhook Handler, Gold Analysis Engine, Temporal Workflows, RAG (pgvector)
+├── frontend/                 <-- UI Dashboard (Grafik Portofolio, Simulasi Proyeksi 3/5/10 Tahun Recharts, Target Tracker)
+└── docker-compose.lisa.yml   <-- Isolasi deployment lokal (FastAPI, PostgreSQL + pgvector, Temporal Worker)
+
+```
+
+### C. Implementasi Temporal & RAG pada `lisa`
+
+* **Temporal Workflows pada `lisa`:**
+  1. *Scheduled Gold Price Ingestion:* Workflow periodik untuk menarik data harga emas multi-vendor terpercaya secara konsisten dengan retry policy otomatis.
+  2. *Portfolio Milestone & Target Tracker Workflow:* Evaluasi otomatis progres target tahunan pengguna dan pengiriman sinyal notifikasi oportunitas beli/jual berkala via Telegram.
+  3. *Long-Horizon Projection Workflow:* Eksekusi simulasi multi-parameter 3, 5, 10 tahun yang membutuhkan pemrosesan analitik intensif.
+* **RAG Engine pada `lisa`:**
+  * Menyimpan dan mengindeks embedding berita pasar emas, data historis fluktuasi harga tahunan, metrik inflasi global/lokal, serta catatan portofolio privat user ke dalam `lisa_db` (`pgvector`).
+  * Saat user meminta analisis atau proyeksi, RAG menyuntikkan data pasar riil dan konteks portofolio terkini ke prompt Gemini, menghasilkan rekomendasi yang sangat akurat dan terbebas dari halusinasi data harga.
+
+### D. Aturan Keamanan & Kontrol Akses (`lisa`)
+
+* **Pola Human-in-the-Loop (Lisa):** AI hanya bertindak sebagai penasihat investasi cerdas (rekomendasi beli/jual/hold dan simulasi nilai aset). AI **dilarang keras** melakukan eksekusi jual/beli otomatis atau memodifikasi portofolio tanpa konfirmasi manual eksplisit dari pengguna. AI menyajikan analisis $\rightarrow$ Manusia yang memutuskan dan mengeksekusi.
+* **Multi-User Isolation:** Data portofolio emas **wajib** terikat ke masing-masing pengguna melalui kolom `user_id`. Tidak boleh ada *query* global tanpa filter kepemilikan.
+* **Telegram Account Linking:**
+1. Pengguna login ke Web Dashboard `lisa`.
+2. Melakukan proses *pairing* akun Telegram untuk mencocokkan `telegram_id` dengan `user_id` di database.
+3. Saat chat masuk ke bot Telegram, backend secara otomatis memetakan `telegram_id` $\rightarrow$ `user_id`, sehingga bot **hanya** memproses dan merespons data portofolio milik user tersebut secara privat. User A tidak dapat mengakses atau menanyakan portofolio User B.
+
+
+
+---
+
+## 2.2. Master Context Proyek `catetin` (POS SaaS Multi-Tenant & Smart Inventory)
+
+> **Tujuan Dokumen:** Konteks spesifik untuk agen AI dalam membangun, merawat, dan mengembangkan proyek `catetin`.
+
+### A. Deskripsi Proyek
+
+Platform Point of Sales (POS) berbasis **SaaS Multi-Tenant** yang dilengkapi asisten AI untuk analisis inventaris dan laporan penjualan, dapat diakses via Web Dashboard Kasir dan Telegram Bot toko.
+
+### B. Arsitektur Folder `catetin/`
+
+```text
+catetin/
+├── backend/                  <-- Multi-Tenant Middleware, POS API, Temporal Workflows, Tenant RAG Engine (pgvector)
+├── frontend/                 <-- POS Kasir UI, Multi-Tenant Merchant Dashboard, Grafik
+└── docker-compose.catetin.yml<-- Isolasi deployment lokal (Backend API, PostgreSQL + pgvector, Temporal Worker)
+
+```
+
+### C. Implementasi Temporal & RAG pada `catetin`
+
+* **Temporal Workflows pada `catetin`:**
+  1. *Daily/Weekly Merchant Summary Workflow:* Workflow terjadwal otomatis yang mengagregasi data transaksi harian/mingguan dan mengirimkan *executive summary* ke Telegram pemilik toko.
+  2. *Automated Low-Stock & Reorder Alert Workflow:* Pemindaian stok barang berkala yang mendeteksi laju penjualan (*run-rate*) dan memicu rekomendasi restock tepat waktu sebelum barang habis.
+  3. *Data Backup & Tenant Sync Workflow:* Alur sinkronisasi data transaksi offline-to-online dan backup tenant berkala secara terisolasi.
+* **RAG Engine pada `catetin`:**
+  * Mengindeks data katalog produk spesifik tenant, riwayat transaksi belanja pelanggan, pola musiman penjualan, dan catatan operasional ke dalam `catetin_db` dengan pemisahan ketat `tenant_id` pada embedding `pgvector`.
+  * Saat kasir atau pemilik toko menanyakan analisis performa penjualan atau strategi promosi barang lambat laku, RAG Engine hanya mengambil konteks spesifik toko tersebut untuk dianalisis oleh Gemini API.
+
+### D. Aturan Keamanan & Kontrol Akses (`catetin`)
+
+* **Pola Human-in-the-Loop (Catetin):** AI berfungsi sebagai asisten analis POS dan inventaris (rekomendasi restock, deteksi produk lambat laku, dan ringkasan keuangan). AI **tidak diizinkan** melakukan perubahan stok sepihak, mengubah harga barang, atau menghapus transaksi tanpa persetujuan/aksi manual dari staf atau pemilik toko.
+* **Tenant Isolation (Multi-Tenancy):** Seluruh tabel operasional (produk, kategori, transaksi, pegawai, hingga koleksi vektor RAG) **wajib** memiliki kolom pengenal **`tenant_id`** atau menggunakan mekanisme *Row-Level Security (RLS)* PostgreSQL.
+* **Pemisahan Data Mutlak Antar-Toko:** Toko A dilarang keras melihat, mengubah, atau meminta informasi (melalui dashboard, RAG query, maupun chatbot Telegram) terkait data transaksi atau inventaris milik Toko B.
+* **Telegram Bot Per Tenant / Linked Staff:** Akun Telegram staf/pemilik toko harus terautentikasi dan terikat ke `tenant_id` spesifik di database, sehingga chatbot POS hanya bertindak sebagai asisten operasional eksklusif untuk toko yang bersangkutan.

@@ -1,0 +1,41 @@
+<svg width="1360" height="980" viewBox="0 0 1360 980" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style>
+      .font-sans { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Canvas Background for Figma -->
+  <rect width="1360" height="980" fill="#0B0F19"/>
+
+  <!-- Top Title Banner -->
+  <g class="font-sans" transform="translate(40, 36)">
+    <text x="0" y="0" font-size="22" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">HADIRIN MOBILE APP — UI DESIGN SYSTEM (3 SCREENS)</text>
+    <text x="0" y="24" font-size="13" font-weight="500" fill="#94A3B8">Modul Prioritas: 1. Beranda &amp; Clock In  •  2. Sedang Bekerja &amp; Clock Out  •  3. Pengajuan Cuti</text>
+  </g>
+
+  <!-- ==================== ARTBOARD 1: CLOCK IN ==================== -->
+  <g id="Artboard-01-Clock-In" transform="translate(40, 80)">
+    <!-- Artboard Title Label -->
+    <text x="4" y="-12" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#38BDF8">01. Beranda &amp; Clock In (Presensi Masuk)</text>
+    <!-- Screen 1 Embed / Group -->
+    <image xlink:href="01_screen_clock_in.svg" width="393" height="852" x="0" y="0"/>
+  </g>
+
+  <!-- ==================== ARTBOARD 2: CLOCK OUT ==================== -->
+  <g id="Artboard-02-Clock-Out" transform="translate(480, 80)">
+    <!-- Artboard Title Label -->
+    <text x="4" y="-12" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#34D399">02. Sedang Bekerja &amp; Clock Out (Pulang)</text>
+    <!-- Screen 2 Embed / Group -->
+    <image xlink:href="02_screen_clock_out.svg" width="393" height="852" x="0" y="0"/>
+  </g>
+
+  <!-- ==================== ARTBOARD 3: LEAVE REQUEST ==================== -->
+  <g id="Artboard-03-Leave-Request" transform="translate(920, 80)">
+    <!-- Artboard Title Label -->
+    <text x="4" y="-12" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#A78BFA">03. Pengajuan Cuti (Leave Request)</text>
+    <!-- Screen 3 Embed / Group -->
+    <image xlink:href="03_screen_pengajuan_cuti.svg" width="393" height="852" x="0" y="0"/>
+  </g>
+</svg>
+

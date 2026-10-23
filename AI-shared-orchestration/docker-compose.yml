@@ -1,0 +1,99 @@
+name: ai-shared-orchestration
+
+services:
+  # ===========================================================================
+  # 1. QDRANT VECTOR DATABASE (Semantic Intent & Knowledge Store)
+  # REST API & Web Dashboard: http://localhost:6333/dashboard
+  # gRPC API                : localhost:6334
+  # ===========================================================================
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: anakpintar-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__LOG_LEVEL=INFO
+    networks:
+      - orchestration-net
+
+  # ===========================================================================
+  # 2. TEMPORAL POSTGRESQL STORAGE (Dedicated Persistence for Temporal State)
+  # Host Port: 5433 -> Container Port: 5432
+  # ===========================================================================
+  temporal-db:
+    image: postgres:16-alpine
+    container_name: anakpintar-temporal-db
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=${TEMPORAL_DB_USER:-temporal}
+      - POSTGRES_PASSWORD=${TEMPORAL_DB_PASSWORD:-temporal}
+      - POSTGRES_DB=${TEMPORAL_DB_NAME:-temporal}
+    volumes:
+      - temporal_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${TEMPORAL_DB_USER:-temporal} -d ${TEMPORAL_DB_NAME:-temporal}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - orchestration-net
+
+  # ===========================================================================
+  # 3. TEMPORAL WORKFLOW ENGINE (Stateful Saga & Workflow Server)
+  # gRPC Frontend Port: localhost:7233
+  # ===========================================================================
+  temporal:
+    image: temporalio/auto-setup:latest
+    container_name: anakpintar-temporal
+    restart: unless-stopped
+    depends_on:
+      temporal-db:
+        condition: service_healthy
+    ports:
+      - "7233:7233"
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=${TEMPORAL_DB_USER:-temporal}
+      - POSTGRES_PWD=${TEMPORAL_DB_PASSWORD:-temporal}
+      - POSTGRES_SEEDS=temporal-db
+      - SKIP_DEFAULT_NAMESPACE_CREATION=false
+    networks:
+      - orchestration-net
+
+  # ===========================================================================
+  # 4. TEMPORAL WEB UI (Workflow Monitoring & Execution Inspector)
+  # Web UI: http://localhost:8088
+  # ===========================================================================
+  temporal-ui:
+    image: temporalio/ui:latest
+    container_name: anakpintar-temporal-ui
+    restart: unless-stopped
+    depends_on:
+      - temporal
+    ports:
+      - "8088:8080"
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000,http://localhost:5173
+    networks:
+      - orchestration-net
+
+volumes:
+  qdrant_storage:
+    name: anakpintar_qdrant_storage
+  temporal_db_data:
+    name: anakpintar_temporal_db_data
+
+networks:
+  orchestration-net:
+    name: anakpintar_orchestration_net
+    driver: bridge
+

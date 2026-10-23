@@ -1,0 +1,112 @@
+# Master Context Ekosistem AI: **Anak-Pintar**
+
+> **Tujuan Dokumen:** Blueprint arsitektur tingkat makro untuk ekosistem AI asisten menyeluruh bernama **Anak-Pintar**. Dokumen ini berfungsi sebagai cetak biru (*master blueprint*) yang memayungi seluruh sub-proyek (`lisa`, `catetin`, `hadirin`, dan proyek-proyek masa depan lainnya) di bawah satu identitas ekosistem terpadu.
+
+---
+
+### 1. Visi & Konsep Ekosistem **Anak-Pintar**
+
+**Anak-Pintar** adalah payung besar (Parent Ecosystem) yang menaungi berbagai asisten cerdas berbasis AI spesifik domain. Ekosistem ini dirancang menggunakan pendekatan *Polyrepo Architecture* yang dipadukan dengan *Shared AI Core* dan *Centralized Identity/Gateway*, memungkinkan setiap modul bertindak mandiri namun tetap berada dalam satu naungan ekosistem produk.
+
+**Pilar Filosofi AI & Keamanan Ekosistem:**
+* **Pola Human-in-the-Loop (HITL):** AI dalam seluruh ekosistem **Anak-Pintar** bertindak murni sebagai **asisten cerdas / penasihat (*co-pilot*)**, BUKAN sebagai pengambil keputusan otomatis (*autonomous decision maker*). Segala bentuk aksi berisiko tinggi atau perubahan data permanen (misal: eksekusi transaksi keuangan, reorder stok, perubahan harga/katalog) sepenuhnya wajib melalui konfirmasi dan kendali pengguna manusia.
+* **AI Orchestration Layer (Guardrail & Context Engine):** AI Orchestration Layer bertindak sebagai perantara yang aman (*secure intermediary*) sebelum prompt diteruskan ke LLM. Lapisan ini bertugas menyaring (*filtering*), memvalidasi konteks isolasi data (`user_id` / `tenant_id` untuk mencegah kebocoran data), menerapkan *safety guardrails*, dan memastikan respon AI relevan serta aman sebelum dikembalikan ke pengguna.
+* **Temporal Workflow Orchestration:** Mengandalkan **Temporal.io** untuk menjamin keandalan eksekusi alur kerja berdurasi panjang (*durable execution*), proses asinkronus multi-tahap, penjadwalan otomatis (*scheduled/cron jobs* seperti rekapitulasi portofolio atau audit inventaris berkala), serta ketahanan terhadap kegagalan jaringan/server (*fault-tolerance & state recovery*).
+* **Retrieval-Augmented Generation (RAG) Terisolasi per Proyek:** Meningkatkan akurasi faktual model dan meminimalkan halusinasi dengan menyediakan basis pengetahuan domain terindeks (menggunakan `pgvector` / vector store terisolasi per proyek). Konteks data historis, regulasi pasar, dokumen toko, dan data personal diambil (*retrieved*) secara dinamis untuk memperkaya prompt sebelum diproses oleh LLM.
+
+### 2. Struktur Direktori Workspace Ekosistem
+
+```text
+anak-pintar-ecosystem/                      <-- Root Workspace Ekosistem ("Anak-Pintar")
+│
+├── lisa/                                   <-- Sub-Proyek 1: Analisis Pasar Emas, Portofolio & Proyeksi Investasi (3, 5, 10 Thn)
+├── catetin/                                <-- Sub-Proyek 2: POS SaaS Multi-Tenant & Smart Inventory
+├── hadirin/                                <-- Sub-Proyek 3: Platform Absensi Berbasis AI Asisten
+├── [proyek_berikutnya]/                    <-- Sub-Proyek N (Skalabel untuk ekspansi masa depan)
+│
+└── shared-docs / configs / gateway (Opsional pusat)
+
+```
+
+---
+
+### 3. Tech Stack Global Ekosistem
+
+* **AI Engine & Orchestration:** Google Gemini API (didukung komputasi Google AI Plus) yang dioperasikan melalui **AI Orchestration Layer (Guardrail & Context Engine)** dengan kepatuhan mutlak pada paradigma **Human-in-the-Loop (HITL)**.
+* **Workflow & Orchestration Engine:** **Temporal.io** (Durable stateful workflow, retry policies, asynchronous task queue, dan scheduled cron engine).
+* **RAG & Knowledge Retrieval:** **Pipeline RAG Terisolasi** didukung oleh PostgreSQL dengan ekstensi **`pgvector`** (Database-per-Service) untuk pencarian kemiripan semantik (*semantic similarity search*) dan injeksi konteks faktual.
+* **Backend Framework:** Python (FastAPI) atau Node.js (Express/NestJS) yang disesuaikan per sub-proyek.
+* **Frontend Framework:** React.js / Next.js dengan Tailwind CSS untuk seluruh *Web Dashboard* masing-masing produk.
+* **Database Layer:** Database-per-Service berbasis PostgreSQL yang diisolasi ketat di setiap sub-proyek (`lisa_db`, `catetin_db`, `hadirin_db`).
+* **Deployment & Containerization:** Docker & Docker Compose mandiri per sub-proyek untuk menjamin stabilitas dan *independent scaling*.
+* **Messaging & Interface:** Telegram Bot API (menggunakan *Webhook*) dan *Web UI Dashboard*.
+
+---
+
+### 4. Diagram Arsitektur Keseluruhan Ekosistem (Format Mermaid untuk Draw.io)
+
+> *Cara impor ke draw.io:* Buka draw.io $\rightarrow$ Pilih menu **Arrange** (atau klik tanda `+`) $\rightarrow$ **Insert** $\rightarrow$ **Advanced** $\rightarrow$ **Mermaid** $\rightarrow$ Tempelkan skrip di bawah ini.
+
+```mermaid
+graph TD
+    subgraph ClientLayer [Client Layer]
+        direction LR
+        U1[Lisa Users] 
+        U2[Catetin Tenants] 
+        U3[Hadirin Users] 
+        UX[Proyek N Users]
+    end
+
+    subgraph Ecosystem [Ekosistem Utama: Anak-Pintar]
+        direction TB
+
+        subgraph Gateways [Backend Gateways]
+            GW1[Lisa Backend]
+            GW2[Catetin Backend]
+            GW3[Hadirin Backend]
+            GWX[Proyek N Backend]
+        end
+
+        subgraph WorkflowEngine [Durable Orchestration]
+            WF[Temporal Workflow Engine<br/>Scheduled Jobs & Stateful Pipelines]
+        end
+
+        subgraph Datastores [Isolated Databases & Vector Stores]
+            DB1[(Lisa DB + pgvector RAG)]
+            DB2[(Catetin DB + pgvector RAG)]
+            DB3[(Hadirin DB + pgvector RAG)]
+            DBX[(Proyek N DB + pgvector RAG)]
+        end
+
+        AI[AI Orchestration Layer<br/>(Guardrail & Context Engine)<br/>Human-in-the-Loop | Gemini API]
+    end
+
+    U1 -->|Webhook / HTTPS| GW1
+    U2 -->|Webhook / HTTPS| GW2
+    U3 -->|Webhook / HTTPS| GW3
+    UX -->|Webhook / HTTPS| GWX
+
+    GW1 <-->|Durable Tasks| WF
+    GW2 <-->|Durable Tasks| WF
+    GW3 <-->|Durable Tasks| WF
+    GWX <-->|Durable Tasks| WF
+
+    GW1 --> DB1
+    GW2 --> DB2
+    GW3 --> DB3
+    GWX --> DBX
+
+    GW1 -.->|Context + RAG| AI
+    GW2 -.->|Context + RAG| AI
+    GW3 -.->|Context + RAG| AI
+    GWX -.->|Context + RAG| AI
+
+    style AI fill:#f9f,stroke:#333,stroke-width:2px
+    style WF fill:#dfd,stroke:#333,stroke-width:2px
+    style Ecosystem fill:#f4f6f8,stroke:#333,stroke-width:2px
+    style DB1 fill:#bbf,stroke:#333,stroke-width:1px
+    style DB2 fill:#bbf,stroke:#333,stroke-width:1px
+    style DB3 fill:#bbf,stroke:#333,stroke-width:1px
+    style DBX fill:#bbf,stroke:#333,stroke-width:1px
+
+```

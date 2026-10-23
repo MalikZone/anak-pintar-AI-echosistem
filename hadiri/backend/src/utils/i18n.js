@@ -1,0 +1,446 @@
+/**
+ * Backend i18n Dictionary and Translator
+ * Supports 'id' (Indonesian) and 'en' (English) with parameter interpolation.
+ */
+
+const messages = {
+  id: {
+    // Auth & Session
+    'auth.missing_fields': 'Email dan kata sandi wajib diisi.',
+    'auth.invalid_credentials': 'Email atau kata sandi yang Anda masukkan salah.',
+    'auth.tenant_not_found': 'Perusahaan/Tenant tidak ditemukan.',
+    'auth.user_not_found': 'Pengguna tidak ditemukan.',
+    'auth.login_success': 'Login berhasil. Selamat datang kembali!',
+    'auth.profile_loaded': 'Profil pengguna berhasil dimuat.',
+    'auth.unauthorized': 'Akses ditolak: Token otentikasi tidak ditemukan. Silakan login.',
+    'auth.user_inactive': 'Pengguna yang terikat dengan token ini sudah tidak terdaftar.',
+    'auth.token_invalid': 'Token otentikasi tidak valid atau telah dimodifikasi.',
+    'auth.token_expired': 'Sesi login telah kedaluwarsa. Silakan login kembali.',
+    'auth.not_authenticated': 'Pengguna belum terotentikasi.',
+    'auth.role_forbidden': 'Akses ditolak: Peran Anda ({currentRole}) tidak memiliki wewenang untuk aksi ini.',
+    'auth.permission_forbidden': 'Akses ditolak: Anda tidak memiliki hak akses ({permission}) untuk melakukan tindakan ini.',
+    'auth.permissions_forbidden': 'Akses ditolak: Tidak memiliki seluruh hak akses yang dibutuhkan.',
+
+    // Tenant Isolation
+    'tenant.missing_context': 'Tenant konteks tidak ditemukan pada sesi pengguna.',
+    'tenant.not_found_or_inactive': 'Perusahaan/Tenant tempat Anda terdaftar tidak aktif atau tidak ditemukan.',
+    'tenant.isolation_violation': 'Pelanggaran Isolasi Multi-Tenant: Anda tidak memiliki wewenang mengakses data perusahaan lain.',
+    'tenant.list_loaded': 'Daftar perusahaan/tenant berhasil dimuat.',
+    'tenant.detail_loaded': 'Detail tenant berhasil diambil.',
+    'tenant.required_fields': 'Nama perusahaan dan kode identifikasi tenant wajib diisi.',
+    'tenant.code_exists': 'Kode tenant {code} sudah digunakan oleh perusahaan lain.',
+    'tenant.created_success': 'Tenant baru {name} ({id}) berhasil didaftarkan.',
+    'tenant.updated_success': 'Data tenant {name} berhasil diperbarui.',
+    'tenant.deleted_success': 'Tenant {name} ({id}) berhasil dinonaktifkan (soft delete).',
+    'tenant.cannot_delete_root': 'Tenant Platform Root (TNT-ROOT-000001) tidak boleh dihapus.',
+    'tenant.saas_overview_loaded': 'Metrik eksekutif SaaS dan kesehatan platform berhasil dimuat.',
+    'tenant.subscription_updated': 'Paket berlangganan dan kuota lisensi tenant {name} berhasil diperbarui.',
+    'tenant.audit_logs_loaded': 'Log audit keamanan platform berhasil dimuat.',
+    'tenant.impersonate_success': 'Berhasil masuk sebagai HR Admin untuk tenant {name}.',
+    'tenant.subscription_suspended': 'Lisensi langganan perusahaan Anda sedang ditangguhkan atau kedaluwarsa. Silakan hubungi Super Admin untuk memperbarui paket langganan.',
+    'tenant.employee_quota_reached': 'Batas kuota karyawan aktif ({max} staf) pada paket langganan {plan} telah tercapai. Silakan tingkatkan paket berlangganan untuk menambah karyawan baru.',
+    'tenant.location_quota_reached': 'Batas kuota cabang/lokasi aktif ({max} lokasi) pada paket langganan {plan} telah tercapai. Silakan tingkatkan paket berlangganan untuk menambah lokasi baru.',
+
+    'attendance.clock_in_success': 'Berhasil Clock-In pada {time} WIB.',
+    'attendance.clock_out_success': 'Berhasil Clock-Out pada {time} WIB (Durasi kerja: {duration}).',
+    'attendance.already_open': 'Anda masih memiliki sesi presensi aktif yang belum Clock-Out (Masuk pukul {time} WIB). Mohon Clock-Out terlebih dahulu.',
+    'attendance.invalid_shift': 'Jadwal shift yang dipilih tidak valid untuk perusahaan Anda.',
+    'attendance.no_open_session': 'Tidak ditemukan sesi Clock-In aktif yang sedang berjalan.',
+    'attendance.clock_in_window_too_early': 'Jendela Clock-In untuk {shift} belum dibuka. Waktu Clock-In: {start} - {end} WIB.',
+    'attendance.clock_in_window_closed': 'Jendela Clock-In untuk {shift} telah ditutup pada pukul {end} WIB (Waktu buka: {start} - {end} WIB). Silakan hubungi Leader atau HR.',
+    'attendance.clock_out_window_too_early': 'Jendela Clock-Out untuk {shift} belum dibuka. Waktu Clock-Out: {start} - {end} WIB.',
+    'attendance.clock_out_window_closed': 'Jendela Clock-Out untuk {shift} telah berakhir pada pukul {end} WIB (Waktu buka: {start} - {end} WIB). Silakan hubungi HR.',
+    'attendance.roster_off_day': 'Hari ini adalah hari libur (Off-Day) sesuai jadwal roster Anda. Tidak diperlukan presensi.',
+    'attendance.no_shift_assigned': 'Akun Anda belum memiliki shift kerja yang aktif. Silakan hubungi HR.',
+    'attendance.today_status_loaded': 'Status presensi hari ini berhasil diambil.',
+    'attendance.history_loaded': 'Riwayat presensi berhasil diambil.',
+    'attendance.tenant_today_loaded': 'Data presensi seluruh staf hari ini berhasil diambil.',
+    'attendance.invalid_user': 'Pengguna tidak valid.',
+
+    // Leave & Time Off
+    'leave.required_fields': 'Tanggal mulai, tanggal berakhir, dan alasan cuti wajib diisi.',
+    'leave.quota_insufficient': 'Sisa kuota cuti tahunan Anda tidak mencukupi (Tersisa: {remaining} hari, diajukan: {requested} hari).',
+    'leave.created_success': 'Pengajuan cuti berhasil dibuat dan sedang menunggu persetujuan Leader.',
+    'leave.created_escalated_success': 'Pengajuan cuti berhasil dibuat dan langsung diteruskan ke HR untuk pengesahan.',
+    'leave.my_loaded': 'Daftar pengajuan cuti pribadi berhasil diambil.',
+    'leave.team_pending_loaded': 'Daftar cuti bawahan yang memerlukan persetujuan Leader.',
+    'leave.hr_pending_loaded': 'Daftar pengajuan cuti yang siap disahkan oleh HR.',
+    'leave.all_loaded': 'Semua data cuti perusahaan berhasil diambil.',
+    'leave.not_found': 'Pengajuan cuti tidak ditemukan pada perusahaan Anda.',
+    'leave.not_pending_leader': 'Pengajuan cuti ini tidak dalam status menunggu persetujuan Leader (Status saat ini: {status}).',
+    'leave.not_subordinate': 'Akses ditolak: Anda bukan atasan langsung/leader dari karyawan yang mengajukan cuti ini.',
+    'leave.invalid_action': "Aksi tidak valid. Pilihan aksi hanya 'approve' atau 'reject'.",
+    'leave.leader_approved': 'Pengajuan cuti berhasil disetujui oleh Leader dan diteruskan ke HR.',
+    'leave.leader_rejected': 'Pengajuan cuti telah ditolak oleh Leader.',
+    'leave.leader_approval_required': 'Aturan Hirarki: Pengajuan cuti ini belum disetujui oleh Leader/Atasan langsung karyawan. Cuti harus disetujui Leader terlebih dahulu sebelum disahkan oleh HR.',
+    'leave.not_pending_hr': 'Pengajuan cuti ini tidak dalam status menunggu pengesahan HR (Status saat ini: {status}).',
+    'leave.hr_approved': 'Pengajuan cuti resmi disahkan oleh HR Admin dan kuota cuti telah diperbarui.',
+    'leave.hr_rejected': 'Pengajuan cuti telah ditolak oleh HR Admin.',
+
+    // Overtime
+    'overtime.required_fields': 'Tanggal, jam mulai, jam selesai, dan alasan lembur wajib diisi.',
+    'overtime.created_success': 'Pengajuan lembur (SPL) berhasil dibuat.',
+    'overtime.my_loaded': 'Riwayat pengajuan lembur pribadi berhasil diambil.',
+    'overtime.tenant_loaded': 'Data pengajuan lembur seluruh karyawan perusahaan.',
+    'overtime.not_found': 'Pengajuan lembur tidak ditemukan pada perusahaan Anda.',
+    'overtime.invalid_action': "Aksi tidak valid. Pilihan aksi hanya 'approve' atau 'reject'.",
+    'overtime.hr_approved': 'Pengajuan lembur (SPL) berhasil disetujui oleh HR.',
+    'overtime.hr_rejected': 'Pengajuan lembur (SPL) telah ditolak oleh HR.',
+
+    // Shifts
+    'shift.tenant_loaded': 'Daftar shift perusahaan berhasil diambil.',
+    'shift.detail_loaded': 'Detail shift berhasil diambil.',
+    'shift.not_found': 'Shift tidak ditemukan untuk perusahaan Anda.',
+    'shift.created_success': 'Shift baru {name} ({code}) berhasil dibuat.',
+    'shift.updated_success': 'Pola shift {name} berhasil diperbarui.',
+    'shift.deleted_success': 'Shift berhasil dinonaktifkan dari sistem.',
+    'shift.required_fields': 'Nama shift, kode singkatan, jam masuk, dan jam pulang wajib diisi.',
+    'shift.invalid_code': 'Kode shift harus berupa alfanumerik kapital (maks 8 karakter).',
+    'shift.code_exists': 'Kode shift {code} sudah digunakan pada perusahaan Anda.',
+    'shift.has_assigned_users': 'Shift tidak dapat dihapus karena masih digunakan oleh {count} karyawan aktif ({names}).',
+
+    // Rosters
+    'roster.my_roster_loaded': 'Jadwal shift kerja Anda berhasil dimuat.',
+    'roster.team_matrix_loaded': 'Matriks jadwal roster tim berhasil dimuat.',
+    'roster.assigned_success': 'Jadwal roster berhasil ditetapkan.',
+    'roster.bulk_generated_success': 'Jadwal roster berhasil digenerate untuk {employeesCount} karyawan ({daysCount} hari).',
+    'roster.switch_submitted_success': 'Permohonan ganti shift berhasil diajukan dan menunggu persetujuan Leader.',
+    'roster.switches_loaded': 'Daftar permohonan ganti shift berhasil dimuat.',
+    'roster.switch_approved': 'Permohonan ganti shift telah disetujui dan jadwal roster telah disesuaikan.',
+    'roster.switch_rejected': 'Permohonan ganti shift telah ditolak.',
+    'roster.required_fields': 'Karyawan dan tanggal jadwal wajib diisi.',
+    'roster.required_dates': 'Rentang tanggal mulai dan tanggal berakhir wajib diisi.',
+    'roster.no_users_targeted': 'Tidak ada karyawan yang sesuai kriteria penugasan roster.',
+    'roster.switch_required_fields': 'Tanggal target, shift yang diajukan, dan alasan ganti shift wajib diisi.',
+    'roster.switch_not_found': 'Permohonan ganti shift tidak ditemukan.',
+    'roster.switch_already_resolved': 'Permohonan ganti shift ini sudah diproses sebelumnya.',
+
+    // Users & Directory (Phase 1: Employee Management & Profile)
+    'user.directory_loaded': 'Direktori karyawan perusahaan berhasil diambil.',
+    'user.detail_loaded': 'Detail profil karyawan berhasil diambil.',
+    'user.team_loaded': 'Daftar anggota tim/bawahan langsung Anda.',
+    'user.hierarchy_loaded': 'Hirarki relasi kerja pengguna berhasil diambil.',
+    'user.not_found': 'Pengguna tidak ditemukan pada perusahaan ini.',
+    'user.required_fields': 'Nama, email, posisi/jabatan, departemen, dan shift wajib diisi.',
+    'user.email_exists': 'Email {email} sudah terdaftar pada perusahaan Anda.',
+    'user.telegram_id_exists': 'ID Telegram ({telegramId}) sudah terdaftar pada karyawan lain di perusahaan Anda.',
+    'user.telegram_id_required': 'ID Telegram wajib diisi untuk pencarian karyawan.',
+    'user.telegram_not_found': 'Karyawan dengan ID Telegram ({telegramId}) tidak ditemukan atau belum ditautkan.',
+    'user.invalid_shift': 'Jadwal shift yang dipilih tidak valid untuk perusahaan Anda.',
+    'user.invalid_leader': 'Leader atau atasan yang dipilih tidak ditemukan dalam perusahaan Anda.',
+    'user.circular_leader': 'Tidak dapat menugaskan karyawan sebagai bawahan dari dirinya sendiri atau terjadi siklus hirarki.',
+    'user.branch_required': 'Penempatan cabang/lokasi kerja wajib dipilih untuk karyawan.',
+    'user.invalid_branch': 'Cabang/lokasi kerja yang dipilih tidak valid untuk perusahaan Anda.',
+    'user.empty_import_data': 'Data impor karyawan kosong atau tidak valid.',
+    'user.created_success': 'Karyawan baru {name} ({id}) berhasil ditambahkan.',
+    'user.updated_success': 'Data karyawan {name} berhasil diperbarui.',
+    'user.deleted_success': 'Karyawan {name} telah berhasil dinonaktifkan dari sistem.',
+    'user.profile_loaded': 'Profil pribadi berhasil dimuat.',
+    'user.profile_updated': 'Profil pribadi Anda berhasil diperbarui.',
+    'user.password_fields_required': 'Kata sandi saat ini dan kata sandi baru wajib diisi.',
+    'user.password_min_length': 'Kata sandi baru minimal harus terdiri dari 6 karakter.',
+    'user.wrong_current_password': 'Kata sandi saat ini yang Anda masukkan salah.',
+    'user.password_changed': 'Kata sandi akun Anda berhasil diperbarui. Silakan gunakan kata sandi baru untuk login selanjutnya.',
+    'user.password_reset_success': 'Kata sandi karyawan berhasil direset oleh HR Admin.',
+
+    // Roles & Permissions (Dynamic RBAC)
+    'role.list_loaded': 'Daftar peran & hak akses perusahaan berhasil dimuat.',
+    'role.detail_loaded': 'Detail peran dan izin berhasil dimuat.',
+    'role.created_success': 'Peran baru {name} ({code}) berhasil dibuat.',
+    'role.updated_success': 'Data peran {name} berhasil diperbarui.',
+    'role.deleted_success': 'Peran {name} berhasil dihapus.',
+    'role.permissions_synced': 'Hak akses peran {name} berhasil diperbarui ({count} izin aktif).',
+    'role.permissions_registry_loaded': 'Daftar katalog hak akses sistem berhasil dimuat.',
+    'role.required_fields': 'Nama peran dan kode peran wajib diisi.',
+    'role.invalid_code': 'Format kode peran tidak valid. Gunakan huruf kapital, angka, atau garis bawah (_).',
+    'role.code_already_exists': 'Kode peran {code} sudah digunakan pada perusahaan ini.',
+    'role.not_found': 'Peran tidak ditemukan pada perusahaan Anda.',
+    'role.cannot_delete_system_role': 'Peran sistem standar tidak dapat dihapus.',
+    'role.cannot_delete_assigned_role': 'Peran ini masih ditugaskan kepada {assignedCount} pengguna dan tidak dapat dihapus.',
+    'role.cannot_modify_superadmin_perms': 'Hak akses Super Admin bersifat mutlak dan tidak dapat diubah.',
+
+    // System
+    // Attendance Corrections
+    'attendance_correction.required_fields': 'Tanggal dan alasan koreksi presensi wajib diisi.',
+    'attendance_correction.time_required': 'Jam masuk atau jam pulang yang diajukan wajib diisi.',
+    'attendance_correction.created_success': 'Pengajuan koreksi presensi berhasil dibuat dan menunggu persetujuan.',
+    'attendance_correction.my_loaded': 'Riwayat pengajuan koreksi presensi Anda berhasil diambil.',
+    'attendance_correction.team_pending_loaded': 'Daftar pengajuan koreksi presensi tim yang menunggu persetujuan Leader.',
+    'attendance_correction.hr_pending_loaded': 'Daftar pengajuan koreksi presensi yang siap disahkan oleh HR.',
+    'attendance_correction.not_found': 'Pengajuan koreksi presensi tidak ditemukan.',
+    'attendance_correction.self_approval_forbidden': 'Akses ditolak: Anda dilarang menyetujui pengajuan koreksi presensi milik sendiri.',
+    'attendance_correction.invalid_action': "Aksi tidak valid. Pilihan aksi hanya 'approve' atau 'reject'.",
+    'attendance_correction.leader_approved': 'Pengajuan koreksi presensi berhasil disetujui Leader dan diteruskan ke HR.',
+    'attendance_correction.leader_rejected': 'Pengajuan koreksi presensi telah ditolak oleh Leader.',
+    'attendance_correction.hr_approved': 'Pengajuan koreksi presensi resmi disahkan oleh HR dan presensi telah diperbarui.',
+    'attendance_correction.hr_rejected': 'Pengajuan koreksi presensi telah ditolak oleh HR Admin.',
+
+    // Notifications
+    'notification.loaded': 'Daftar notifikasi berhasil diambil.',
+    'notification.marked_read': 'Notifikasi berhasil ditandai sebagai telah dibaca.',
+    'notification.all_marked_read': 'Semua notifikasi berhasil ditandai sebagai telah dibaca.',
+
+    // System
+    'system.route_not_found': "Rute endpoint '{path}' tidak ditemukan pada server ini.",
+    'system.internal_error': 'Terjadi kesalahan internal pada server.',
+    'system.healthy': 'Hadirin Backend API beroperasi normal dan sehat 🚀',
+  },
+  en: {
+    // Auth & Session
+    'auth.missing_fields': 'Email and password are required.',
+    'auth.invalid_credentials': 'The email or password you entered is incorrect.',
+    'auth.tenant_not_found': 'Company/Tenant not found.',
+    'auth.user_not_found': 'User account not found.',
+    'auth.login_success': 'Login successful. Welcome back!',
+    'auth.profile_loaded': 'User profile loaded successfully.',
+    'auth.unauthorized': 'Access denied: Authentication token not found. Please sign in.',
+    'auth.user_inactive': 'The user account associated with this token is no longer registered.',
+    'auth.token_invalid': 'Authentication token is invalid or has been modified.',
+    'auth.token_expired': 'Your login session has expired. Please sign in again.',
+    'auth.not_authenticated': 'User is not authenticated.',
+    'auth.role_forbidden': 'Access denied: Your role ({currentRole}) does not have permission for this action.',
+    'auth.permission_forbidden': 'Access denied: You do not have permission ({permission}) to perform this action.',
+    'auth.permissions_forbidden': 'Access denied: Missing required permissions for this action.',
+
+    // Tenant Isolation
+    'tenant.missing_context': 'Tenant context not found in user session.',
+    'tenant.not_found_or_inactive': 'The company/tenant you are registered with is inactive or not found.',
+    'tenant.isolation_violation': 'Multi-Tenant Isolation Violation: You are not authorized to access another company’s data.',
+    'tenant.list_loaded': 'Tenant companies list loaded successfully.',
+    'tenant.detail_loaded': 'Tenant detail loaded successfully.',
+    'tenant.required_fields': 'Company name and tenant identification code are required.',
+    'tenant.code_exists': 'Tenant code {code} is already in use by another company.',
+    'tenant.created_success': 'New tenant {name} ({id}) registered successfully.',
+    'tenant.updated_success': 'Tenant {name} updated successfully.',
+    'tenant.deleted_success': 'Tenant {name} ({id}) successfully deactivated (soft deleted).',
+    'tenant.cannot_delete_root': 'Platform Root Tenant (TNT-ROOT-000001) cannot be deleted.',
+    'tenant.saas_overview_loaded': 'SaaS executive metrics and platform health loaded successfully.',
+    'tenant.subscription_updated': 'Subscription plan and license quota for tenant {name} updated successfully.',
+    'tenant.audit_logs_loaded': 'Platform security audit logs loaded successfully.',
+    'tenant.impersonate_success': 'Successfully switched into HR Admin context for tenant {name}.',
+    'tenant.subscription_suspended': 'Your company subscription license is suspended or expired. Please contact Super Admin to renew your subscription plan.',
+    'tenant.employee_quota_reached': 'Active employee quota limit ({max} staff) for your {plan} plan has been reached. Please upgrade your subscription plan to add more employees.',
+    'tenant.location_quota_reached': 'Active branch/location quota limit ({max} locations) for your {plan} plan has been reached. Please upgrade your subscription plan to add more locations.',
+
+    // Attendance & Clock
+    'attendance.clock_in_success': 'Clock-In recorded successfully at {time} WIB.',
+    'attendance.clock_out_success': 'Clock-Out recorded successfully at {time} WIB (Working duration: {duration}).',
+    'attendance.already_open': 'You have an active Clock-In session that has not clocked out (Clocked in at {time} WIB). Please clock out first.',
+    'attendance.invalid_shift': 'The selected working shift is invalid for your company.',
+    'attendance.no_open_session': 'No active Clock-In session found.',
+    'attendance.clock_in_window_too_early': 'Clock-In window for {shift} is not yet open. Clock-In hours: {start} - {end} WIB.',
+    'attendance.clock_in_window_closed': 'Clock-In window for {shift} closed at {end} WIB (Open: {start} - {end} WIB). Please contact Leader or HR.',
+    'attendance.clock_out_window_too_early': 'Clock-Out window for {shift} is not yet open. Clock-Out hours: {start} - {end} WIB.',
+    'attendance.clock_out_window_closed': 'Clock-Out window for {shift} ended at {end} WIB (Open: {start} - {end} WIB). Please contact HR.',
+    'attendance.roster_off_day': 'Today is an Off-Day according to your roster schedule. Attendance is not required.',
+    'attendance.no_shift_assigned': 'Your account does not have an active shift assigned. Please contact HR.',
+    'attendance.today_status_loaded': 'Today attendance status loaded successfully.',
+    'attendance.history_loaded': 'Attendance history loaded successfully.',
+    'attendance.tenant_today_loaded': 'Tenant staff attendance data for today loaded successfully.',
+    'attendance.invalid_user': 'Invalid user account.',
+
+    // Leave & Time Off
+    'leave.required_fields': 'Start date, end date, and reason for leave are required.',
+    'leave.quota_insufficient': 'Insufficient annual leave quota (Remaining: {remaining} days, requested: {requested} days).',
+    'leave.created_success': 'Leave request submitted successfully and is awaiting Leader approval.',
+    'leave.created_escalated_success': 'Leave request submitted and escalated directly to HR for final sign-off.',
+    'leave.my_loaded': 'Personal leave requests loaded successfully.',
+    'leave.team_pending_loaded': 'Team subordinate leaves requiring Leader approval.',
+    'leave.hr_pending_loaded': 'Leave requests ready for final HR sign-off.',
+    'leave.all_loaded': 'All company leave records loaded successfully.',
+    'leave.not_found': 'Leave request not found for your company.',
+    'leave.not_pending_leader': 'This leave request is not awaiting Leader approval (Current status: {status}).',
+    'leave.not_subordinate': 'Access denied: You are not the direct leader/supervisor of the employee requesting this leave.',
+    'leave.invalid_action': "Invalid action. Allowed actions are 'approve' or 'reject'.",
+    'leave.leader_approved': 'Leave request approved by Leader and forwarded to HR.',
+    'leave.leader_rejected': 'Leave request rejected by Leader.',
+    'leave.leader_approval_required': 'Hierarchy Rule: This leave request has not yet been approved by the employee’s Leader. Leaves must be approved by Leader before HR sign-off.',
+    'leave.not_pending_hr': 'This leave request is not awaiting HR sign-off (Current status: {status}).',
+    'leave.hr_approved': 'Leave request officially approved by HR and leave balance updated.',
+    'leave.hr_rejected': 'Leave request rejected by HR Admin.',
+
+    // Overtime
+    'overtime.required_fields': 'Date, start time, end time, and reason are required.',
+    'overtime.created_success': 'Overtime request (SPL) submitted successfully.',
+    'overtime.my_loaded': 'Personal overtime requests loaded successfully.',
+    'overtime.tenant_loaded': 'All company overtime requests loaded successfully.',
+    'overtime.not_found': 'Overtime request not found for your company.',
+    'overtime.invalid_action': "Invalid action. Allowed actions are 'approve' or 'reject'.",
+    'overtime.hr_approved': 'Overtime request (SPL) approved by HR.',
+    'overtime.hr_rejected': 'Overtime request (SPL) rejected by HR.',
+
+    // Shifts
+    'shift.tenant_loaded': 'Company shift master list loaded successfully.',
+    'shift.detail_loaded': 'Shift details loaded successfully.',
+    'shift.not_found': 'Shift not found for your company.',
+    'shift.created_success': 'New shift {name} ({code}) created successfully.',
+    'shift.updated_success': 'Shift pattern {name} updated successfully.',
+    'shift.deleted_success': 'Shift has been successfully deactivated.',
+    'shift.required_fields': 'Shift name, short code, start time, and end time are required.',
+    'shift.invalid_code': 'Shift code must be uppercase alphanumeric (max 8 characters).',
+    'shift.code_exists': 'Shift code {code} is already in use in your company.',
+    'shift.has_assigned_users': 'Cannot delete shift because it is currently assigned to {count} active employees ({names}).',
+
+    // Rosters
+    'roster.my_roster_loaded': 'Your working shift roster loaded successfully.',
+    'roster.team_matrix_loaded': 'Team roster schedule matrix loaded successfully.',
+    'roster.assigned_success': 'Roster schedule assigned successfully.',
+    'roster.bulk_generated_success': 'Roster schedule generated successfully for {employeesCount} employees ({daysCount} days).',
+    'roster.switch_submitted_success': 'Shift switch request submitted successfully and awaiting Leader review.',
+    'roster.switches_loaded': 'Shift switch requests loaded successfully.',
+    'roster.switch_approved': 'Shift switch request approved and roster schedule adjusted.',
+    'roster.switch_rejected': 'Shift switch request has been rejected.',
+    'roster.required_fields': 'Employee and schedule date are required.',
+    'roster.required_dates': 'Start date and end date are required.',
+    'roster.no_users_targeted': 'No target employees found matching the roster criteria.',
+    'roster.switch_required_fields': 'Target date, requested shift, and reason are required.',
+    'roster.switch_not_found': 'Shift switch request not found.',
+    'roster.switch_already_resolved': 'This shift switch request has already been resolved.',
+
+    // Users & Directory (Phase 1: Employee Management & Profile)
+    'user.directory_loaded': 'Company employee directory loaded successfully.',
+    'user.detail_loaded': 'Employee profile details loaded successfully.',
+    'user.team_loaded': 'Your direct team members and subordinates list.',
+    'user.hierarchy_loaded': 'User hierarchy and reporting relationships loaded successfully.',
+    'user.not_found': 'User account not found in this company.',
+    'user.required_fields': 'Full name, email, position, department, and shift are required.',
+    'user.email_exists': 'Email {email} is already registered in your company.',
+    'user.telegram_id_exists': 'Telegram ID ({telegramId}) is already linked to another employee in your company.',
+    'user.telegram_id_required': 'Telegram ID is required to look up an employee.',
+    'user.telegram_not_found': 'No active employee found with Telegram ID ({telegramId}).',
+    'user.invalid_shift': 'The selected working shift is invalid for your company.',
+    'user.invalid_leader': 'The selected leader/manager was not found in your company.',
+    'user.circular_leader': 'Cannot assign an employee to report to themselves or form a circular hierarchy.',
+    'user.branch_required': 'Branch/work location assignment is required for employees.',
+    'user.invalid_branch': 'The selected branch/work location is invalid for your company.',
+    'user.empty_import_data': 'Employee import data is empty or invalid.',
+    'user.created_success': 'New employee {name} ({id}) created successfully.',
+    'user.updated_success': 'Employee {name} details updated successfully.',
+    'user.deleted_success': 'Employee {name} has been successfully deactivated from the system.',
+    'user.profile_loaded': 'Personal profile loaded successfully.',
+    'user.profile_updated': 'Your personal profile has been updated successfully.',
+    'user.password_fields_required': 'Current password and new password are required.',
+    'user.password_min_length': 'New password must be at least 6 characters long.',
+    'user.wrong_current_password': 'The current password you entered is incorrect.',
+    'user.password_changed': 'Your password has been changed successfully. Please use your new password on next login.',
+    'user.password_reset_success': 'Employee password has been reset successfully by HR Admin.',
+
+    // Roles & Permissions (Dynamic RBAC)
+    'role.list_loaded': 'Company roles and permissions list loaded successfully.',
+    'role.detail_loaded': 'Role details and permissions loaded successfully.',
+    'role.created_success': 'New role {name} ({code}) created successfully.',
+    'role.updated_success': 'Role {name} updated successfully.',
+    'role.deleted_success': 'Role {name} deleted successfully.',
+    'role.permissions_synced': 'Permissions for role {name} updated successfully ({count} active permissions).',
+    'role.permissions_registry_loaded': 'System permissions registry loaded successfully.',
+    'role.required_fields': 'Role name and role code are required.',
+    'role.invalid_code': 'Invalid role code format. Use uppercase letters, numbers, or underscores (_).',
+    'role.code_already_exists': 'Role code {code} is already in use in this company.',
+    'role.not_found': 'Role not found in your company.',
+    'role.cannot_delete_system_role': 'Standard system roles cannot be deleted.',
+    'role.cannot_delete_assigned_role': 'This role is currently assigned to {assignedCount} users and cannot be deleted.',
+    'role.cannot_modify_superadmin_perms': 'Super Admin permissions are absolute and cannot be modified.',
+
+    // Attendance Corrections
+    'attendance_correction.required_fields': 'Date and reason for attendance correction are required.',
+    'attendance_correction.time_required': 'Proposed clock-in or clock-out time is required.',
+    'attendance_correction.created_success': 'Attendance correction request submitted successfully and is awaiting approval.',
+    'attendance_correction.my_loaded': 'Your attendance correction requests loaded successfully.',
+    'attendance_correction.team_pending_loaded': 'Team attendance correction requests requiring Leader approval.',
+    'attendance_correction.hr_pending_loaded': 'Attendance correction requests ready for HR endorsement.',
+    'attendance_correction.not_found': 'Attendance correction request not found.',
+    'attendance_correction.self_approval_forbidden': 'Access denied: You cannot approve your own attendance correction request.',
+    'attendance_correction.invalid_action': "Invalid action. Allowed actions are 'approve' or 'reject'.",
+    'attendance_correction.leader_approved': 'Attendance correction approved by Leader and forwarded to HR.',
+    'attendance_correction.leader_rejected': 'Attendance correction request was rejected by Leader.',
+    'attendance_correction.hr_approved': 'Attendance correction officially endorsed by HR and attendance has been updated.',
+    'attendance_correction.hr_rejected': 'Attendance correction request was rejected by HR Admin.',
+
+    // Notifications
+    'notification.loaded': 'Notifications loaded successfully.',
+    'notification.marked_read': 'Notification marked as read successfully.',
+    'notification.all_marked_read': 'All notifications marked as read successfully.',
+
+    // System
+    'system.route_not_found': "Endpoint route '{path}' was not found on this server.",
+    'system.internal_error': 'An internal server error occurred.',
+    'system.healthy': 'Hadirin Backend API is operational & healthy 🚀',
+  },
+};
+
+/**
+ * Fallback mapping from legacy hardcoded Indonesian strings to semantic keys
+ */
+const legacyMap = {
+  'Email dan kata sandi wajib diisi.': 'auth.missing_fields',
+  'Email atau kata sandi yang Anda masukkan salah.': 'auth.invalid_credentials',
+  'Perusahaan/Tenant tidak ditemukan.': 'auth.tenant_not_found',
+  'Pengguna tidak ditemukan.': 'auth.user_not_found',
+  'Login berhasil. Selamat datang kembali!': 'auth.login_success',
+  'Profil pengguna berhasil dimuat.': 'auth.profile_loaded',
+  'Akses ditolak: Token otentikasi tidak ditemukan. Silakan login.': 'auth.unauthorized',
+  'Pengguna yang terikat dengan token ini sudah tidak terdaftar.': 'auth.user_inactive',
+  'Token otentikasi tidak valid atau telah dimodifikasi.': 'auth.token_invalid',
+  'Sesi login telah kedaluwarsa. Silakan login kembali.': 'auth.token_expired',
+  'Pengguna belum terotentikasi.': 'auth.not_authenticated',
+  'Tenant konteks tidak ditemukan pada sesi pengguna.': 'tenant.missing_context',
+  'Perusahaan/Tenant tempat Anda terdaftar tidak aktif atau tidak ditemukan.': 'tenant.not_found_or_inactive',
+  'Pelanggaran Isolasi Multi-Tenant: Anda tidak memiliki wewenang mengakses data perusahaan lain.': 'tenant.isolation_violation',
+  'Jadwal shift yang dipilih tidak valid untuk perusahaan Anda.': 'attendance.invalid_shift',
+  'Tidak ditemukan sesi Clock-In aktif yang sedang berjalan.': 'attendance.no_open_session',
+  'Status presensi hari ini berhasil diambil.': 'attendance.today_status_loaded',
+  'Riwayat presensi berhasil diambil.': 'attendance.history_loaded',
+  'Data presensi seluruh staf hari ini berhasil diambil.': 'attendance.tenant_today_loaded',
+  'Pengguna tidak valid.': 'attendance.invalid_user',
+  'Tanggal mulai, tanggal berakhir, dan alasan cuti wajib diisi.': 'leave.required_fields',
+  'Daftar pengajuan cuti pribadi berhasil diambil.': 'leave.my_loaded',
+  'Daftar cuti bawahan yang memerlukan persetujuan Leader.': 'leave.team_pending_loaded',
+  'Daftar pengajuan cuti yang siap disahkan oleh HR.': 'leave.hr_pending_loaded',
+  'Semua data cuti perusahaan berhasil diambil.': 'leave.all_loaded',
+  'Pengajuan cuti tidak ditemukan pada perusahaan Anda.': 'leave.not_found',
+  'Akses ditolak: Anda bukan atasan langsung/leader dari karyawan yang mengajukan cuti ini.': 'leave.not_subordinate',
+  "Aksi tidak valid. Pilihan aksi hanya 'approve' atau 'reject'.": 'leave.invalid_action',
+  'Tanggal, jam mulai, jam selesai, dan alasan lembur wajib diisi.': 'overtime.required_fields',
+  'Riwayat pengajuan lembur pribadi berhasil diambil.': 'overtime.my_loaded',
+  'Data pengajuan lembur seluruh karyawan perusahaan.': 'overtime.tenant_loaded',
+  'Pengajuan lembur tidak ditemukan pada perusahaan Anda.': 'overtime.not_found',
+  'Daftar shift perusahaan berhasil diambil.': 'shift.tenant_loaded',
+  'Detail shift berhasil diambil.': 'shift.detail_loaded',
+  'Shift tidak ditemukan untuk perusahaan Anda.': 'shift.not_found',
+  'Direktori karyawan perusahaan berhasil diambil.': 'user.directory_loaded',
+  'Daftar anggota tim/bawahan langsung Anda.': 'user.team_loaded',
+  'Hirarki relasi kerja pengguna berhasil diambil.': 'user.hierarchy_loaded',
+  'Pengguna tidak ditemukan pada perusahaan ini.': 'user.not_found',
+  'Terjadi kesalahan internal pada server.': 'system.internal_error',
+};
+
+/**
+ * Translate a message key or legacy string into target language
+ * @param {string} keyOrMessage - The translation key (e.g. 'auth.login_success') or legacy message
+ * @param {string} lang - 'id' or 'en'
+ * @param {object} params - Key-value replacements (e.g. { time: '08:30' })
+ * @returns {string}
+ */
+export const t = (keyOrMessage, lang = 'id', params = {}) => {
+  const targetLang = lang === 'en' ? 'en' : 'id';
+  
+  // Resolve key from direct key or legacy string
+  let key = keyOrMessage;
+  if (!messages[targetLang][key] && legacyMap[keyOrMessage]) {
+    key = legacyMap[keyOrMessage];
+  }
+
+  let text = messages[targetLang]?.[key] || messages['id']?.[key] || keyOrMessage;
+
+  // Parameter substitution {paramName}
+  if (params && typeof params === 'object') {
+    Object.entries(params).forEach(([paramKey, val]) => {
+      text = text.replace(new RegExp(`\\{${paramKey}\\}`, 'g'), String(val));
+    });
+  }
+
+  return text;
+};
+
+export default { messages, t };
+

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hadirin Mobile App — UI Design Preview (Figma Ready)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0B0F19;
+      color: #F8FAFC;
+      min-height: 100vh;
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+      max-width: 800px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #A5B4FC;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      color: #94A3B8;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .instructions {
+      background: #1E293B;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 16px 24px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      max-width: 900px;
+    }
+    .instructions svg {
+      flex-shrink: 0;
+    }
+    .instructions-text {
+      font-size: 13px;
+      color: #CBD5E1;
+    }
+    .instructions-text strong {
+      color: #38BDF8;
+    }
+    .screens-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      width: 100%;
+      max-width: 1360px;
+    }
+    .screen-card {
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 28px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .screen-card:hover {
+      transform: translateY(-4px);
+      border-color: #38BDF8;
+    }
+    .screen-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+    .screen-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+    .screen-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .tag-blue { background: rgba(56, 189, 248, 0.15); color: #38BDF8; }
+    .tag-green { background: rgba(52, 211, 153, 0.15); color: #34D399; }
+    .tag-purple { background: rgba(167, 139, 250, 0.15); color: #A78BFA; }
+    .svg-wrapper {
+      width: 393px;
+      height: 852px;
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      background: #FFFFFF;
+    }
+    .svg-wrapper object, .svg-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .download-btn {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #1E293B;
+      color: #F8FAFC;
+      border: 1px solid #334155;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .download-btn:hover {
+      background: #334155;
+      border-color: #38BDF8;
+      color: #38BDF8;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">FIGMA-READY VECTOR UI</div>
+    <h1>Desain Mobile App Hadirin</h1>
+    <p class="subtitle">3 Layar Utama: Clock In, Sesi Aktif (Clock Out), dan Pengajuan Cuti.<br>Semua file berformat <strong>SVG Vector Murni</strong> yang dapat langsung di-<em>drag & drop</em> ke dalam kanvas Figma.</p>
+  </header>
+
+  <div class="instructions">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    </svg>
+    <div class="instructions-text">
+      <strong>Cara Import ke Figma:</strong> Buka Figma (Web atau Desktop) &gt; Buka project/file Anda &gt; Cukup <em>drag and drop</em> file <code>.svg</code> dari folder <code>hadiri/mobile_design/</code> langsung ke kanvas Figma. Figma akan otomatis membongkar seluruh layer, text, vector icon, warna gradient, dan frame menjadi elemen yang 100% dapat diedit.
+    </div>
+  </div>
+
+  <div class="screens-container">
+    <!-- Screen 1 -->
+    <div class="screen-card">
+      <div class="screen-header">
+        <span class="screen-title">01. Beranda &amp; Clock In</span>
+        <span class="screen-tag tag-blue">Menu 1</span>
+      </div>
+      <div class="svg-wrapper">
+        <object data="01_screen_clock_in.svg" type="image/svg+xml"></object>
+      </div>
+      <a href="01_screen_clock_in.svg" download class="download-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>
+        Download SVG Screen 1
+      </a>
+    </div>
+
+    <!-- Screen 2 -->
+    <div class="screen-card">
+      <div class="screen-header">
+        <span class="screen-title">02. Sedang Bekerja &amp; Clock Out</span>
+        <span class="screen-tag tag-green">Menu 2</span>
+      </div>
+      <div class="svg-wrapper">
+        <object data="02_screen_clock_out.svg" type="image/svg+xml"></object>
+      </div>
+      <a href="02_screen_clock_out.svg" download class="download-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>
+        Download SVG Screen 2
+      </a>
+    </div>
+
+    <!-- Screen 3 -->
+    <div class="screen-card">
+      <div class="screen-header">
+        <span class="screen-title">03. Pengajuan Cuti</span>
+        <span class="screen-tag tag-purple">Menu 3</span>
+      </div>
+      <div class="svg-wrapper">
+        <object data="03_screen_pengajuan_cuti.svg" type="image/svg+xml"></object>
+      </div>
+      <a href="03_screen_pengajuan_cuti.svg" download class="download-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>
+        Download SVG Screen 3
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
+

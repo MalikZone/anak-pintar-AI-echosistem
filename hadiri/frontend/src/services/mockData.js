@@ -1,0 +1,103 @@
+// Metadata dan Template Fallback untuk Hadirin SaaS Multi-Tenant
+
+export const COMPANY_PROFILE = {
+  id: 'COMP-001',
+  code: 'ANAKPINTAR',
+  name: 'PT Anak Pintar Nusantara',
+  tagline: 'AI Ecosystem & Workforce Innovation',
+  timezone: 'Asia/Jakarta', // WIB
+  timezoneLabel: 'WIB (UTC+7)',
+  workModel: 'Hybrid Shifting & Flexible',
+  overtimePolicy: {
+    rateType: 'government_standard', // PP 35/2021
+    weekdayMultiplierFirstHour: 1.5,
+    weekdayMultiplierAfter: 2.0,
+    weekendMultiplier: 2.0,
+    allowPreShift: true,
+    allowPostShift: true,
+    allowOffDay: true,
+    minOvertimeMinutes: 30,
+    maxDailyOvertimeHours: 4,
+  },
+  headquarters: {
+    name: 'Kantor Pusat - Menara Batavia Lt. 18',
+    address: 'Jl. K.H. Mas Mansyur Kav. 126, Karet Tengsin, Tanah Abang, Jakarta Pusat 10220',
+    latitude: -6.2088,
+    longitude: 106.8456,
+    defaultRadiusMeters: 100,
+  },
+};
+
+export const COMPANY_SHIFTS = [
+  {
+    id: 'SHIFT-REG',
+    code: 'REG',
+    name: 'WFO - Reguler Non-Shift',
+    description: 'Jam kerja operasional standar kantor (Senin - Jumat)',
+    startTime: '08:30',
+    endTime: '17:30',
+    isCrossDay: false,
+    gracePeriodMinutes: 15,
+    breakDurationMinutes: 60,
+    checkInWindow: { start: '07:30', end: '11:00' },
+    checkOutWindow: { start: '17:00', end: '22:00' },
+    badgeColor: 'blue',
+  },
+  {
+    id: 'SHIFT-S1',
+    code: 'S1',
+    name: 'Shift 1 - Pagi (Operasional/Support)',
+    description: 'Shift pagi tim operasional dan logistik',
+    startTime: '07:00',
+    endTime: '15:00',
+    isCrossDay: false,
+    gracePeriodMinutes: 15,
+    breakDurationMinutes: 60,
+    checkInWindow: { start: '06:00', end: '09:00' },
+    checkOutWindow: { start: '15:00', end: '19:00' },
+    badgeColor: 'emerald',
+  },
+  {
+    id: 'SHIFT-S2',
+    code: 'S2',
+    name: 'Shift 2 - Siang / Sore',
+    description: 'Shift siang pergantian operasional',
+    startTime: '15:00',
+    endTime: '23:00',
+    isCrossDay: false,
+    gracePeriodMinutes: 15,
+    breakDurationMinutes: 60,
+    checkInWindow: { start: '14:00', end: '17:00' },
+    checkOutWindow: { start: '23:00', end: '02:00' },
+    badgeColor: 'amber',
+  },
+  {
+    id: 'SHIFT-S3',
+    code: 'S3',
+    name: 'Shift 3 - Malam (Lintas Hari / Cross-Midnight)',
+    description: 'Shift malam berganti hari esok (23:00 s/d 07:00 H+1)',
+    startTime: '23:00',
+    endTime: '07:00',
+    isCrossDay: true,
+    crossDayLabel: 'Ganti Hari (Selesai Esok Pagi)',
+    gracePeriodMinutes: 15,
+    breakDurationMinutes: 60,
+    checkInWindow: { start: '21:30', end: '01:30' },
+    checkOutWindow: { start: '06:00', end: '10:00' },
+    badgeColor: 'indigo',
+  },
+];
+
+export const DEFAULT_WEEKLY_ROSTER = [
+  {
+    date: new Date().toISOString().split('T')[0],
+    dayName: 'Hari Ini',
+    shiftId: 'SHIFT-REG',
+    shiftName: 'WFO - Reguler Pagi',
+    startTime: '08:30',
+    endTime: '17:30',
+    isCrossDay: false,
+    isOffDay: false,
+    isToday: true,
+  },
+];

@@ -1,0 +1,32 @@
+{
+  "name": "hadirin-backend",
+  "version": "1.0.0",
+  "description": "Smart Attendance & HR Platform Backend (Multi-Tenant & Layered Architecture)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "migrate": "node src/database/migrations/runMigrations.js",
+    "seed:mysql": "node src/database/seeds/seedMysql.js",
+    "test": "node test-backend.js"
+  },
+  "keywords": [
+    "hadirin",
+    "hris",
+    "attendance",
+    "multi-tenant",
+    "nodejs",
+    "express"
+  ],
+  "author": "Anak Pintar Ecosystem",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.24.4"
+  }
+}

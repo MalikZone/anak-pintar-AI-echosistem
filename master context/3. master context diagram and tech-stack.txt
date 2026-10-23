@@ -1,0 +1,154 @@
+Berikut adalah pembaruan pada Master Context dengan tambahan **Tech Stack yang direkomendasikan** serta **Diagram Arsitektur Keseluruhan dalam format Mermaid** (yang dapat disalin langsung dan diimpor ke dalam *draw.io* menggunakan fitur *Insert $\rightarrow$ Advanced $\rightarrow$ Mermaid*).
+
+---
+
+# BAGIAN 1: Master Context Ekosistem AI (Blueprint Global & Tech Stack)
+
+### A. Tech Stack Ekosistem
+
+* **AI Engine & Orchestration:** Google Gemini API (didukung komputasi Google AI Plus) yang dikawal oleh **AI Orchestration Layer (Guardrail & Context Engine)** dengan kepatuhan mutlak pada filosofi **Human-in-the-Loop (HITL)** — AI bertindak murni sebagai asisten/advisor, bukan pengambil keputusan otomatis.
+* **Workflow & Automation Engine:** **Temporal.io** (Durable execution, fault-tolerant background processing, scheduled cron workflows, dan distributed state management).
+* **RAG & Knowledge Retrieval:** **Domain-Specific RAG** dengan PostgreSQL + **`pgvector`** terisolasi per proyek (pencarian semantik dan injeksi konteks faktual).
+* **Backend Framework:** Python (FastAPI) atau Node.js (Express/NestJS) untuk kecepatan asinkronus dan kemudahan integrasi API Telegram.
+* **Frontend Framework:** React.js / Next.js dengan Tailwind CSS untuk UI Dashboard yang responsif dan komponen grafik interaktif (Recharts / Chart.js).
+* **Database:** PostgreSQL (Masing-masing proyek memiliki instance/database terpisah untuk isolasi penuh + ekstensi `pgvector`).
+* **Containerization & Deployment:** Docker & Docker Compose per proyek untuk mendukung arsitektur *polyrepo*.
+* **Messaging / Bot Integration:** Telegram Bot API (menggunakan *Webhook*).
+
+### B. Diagram Arsitektur Keseluruhan (Format Mermaid untuk Draw.io)
+
+> *Cara impor ke draw.io:* Buka draw.io $\rightarrow$ Pilih menu **Arrange** (atau klik tanda `+`) $\rightarrow$ **Insert** $\rightarrow$ **Advanced** $\rightarrow$ **Mermaid** $\rightarrow$ Tempelkan skrip di bawah ini.
+
+```mermaid
+graph TD
+    subgraph Client Layer
+        U1[Telegram User: Lisa] -->|Webhook HTTPS| GW1[Lisa Backend API]
+        U2[Telegram User: Catetin] -->|Webhook HTTPS| GW2[Catetin Backend API]
+        M[Merchant / Cashier] -->|REST / HTTPS| FE2[Catetin Frontend Dashboard]
+        DW[Lisa Web User] -->|REST / HTTPS| FE1[Lisa Frontend Dashboard]
+    end
+
+    subgraph Application Workspace (Polyrepo)
+        subgraph Lisa Project
+            FE1 -->|API Calls| GW1
+            GW1 <-->|Durable Workflows| WF1[Temporal Workers: Lisa]
+            GW1 --> DB1[(Database 1: Lisa DB<br/>Portfolios & pgvector RAG)]
+        end
+
+        subgraph Catetin Project
+            FE2 -->|API Calls| GW2
+            GW2 <-->|Durable Workflows| WF2[Temporal Workers: Catetin]
+            GW2 --> DB2[(Database 2: Catetin DB<br/>Multi-Tenant pgvector RAG)]
+        end
+
+        GW1 -->|RAG Context + Guardrail| AI[AI Orchestration Layer<br/>(Guardrail & Context Engine)<br/>Human-in-the-Loop | Gemini API]
+        GW2 -->|RAG Context + Guardrail| AI
+    end
+
+    style AI fill:#f9f,stroke:#333,stroke-width:2px
+    style WF1 fill:#dfd,stroke:#333,stroke-width:1px
+    style WF2 fill:#dfd,stroke:#333,stroke-width:1px
+    style DB1 fill:#bbf,stroke:#333,stroke-width:1px
+    style DB2 fill:#bbf,stroke:#333,stroke-width:1px
+
+```
+
+---
+
+---
+
+# BAGIAN 2: Master Context Spesifik Proyek (Project-Specific Contexts)
+
+## 2.1. Master Context Proyek `lisa` (Analisis Pasar Emas, Personal Portfolio & Proyeksi Investasi)
+
+### A. Tech Stack Spesifik `lisa`
+
+* **Backend:** Python (FastAPI) + `python-telegram-bot` + `temporalio` Python SDK + modul kalkulator finansial/proyeksi (NumPy / Pandas)
+* **Frontend:** Next.js / React + Tailwind CSS + Recharts (visualisasi pergerakan harga emas, grafik milestone target tahunan, dan simulasi proyeksi investasi 3, 5, 10 tahun)
+* **Database & RAG:** PostgreSQL (`lisa_db` dengan ekstensi `pgvector` untuk pencarian semantik berita pasar, regulasi, dan riwayat portofolio)
+* **Workflow Engine:** Temporal.io (Polling berkala harga pasar emas, evaluasi otomatis milestone target, eksekusi simulasi multi-tahun)
+* **Core Capabilities:**
+  1. *Real-time Market & AI Recommendation Engine* (Analisis harga & rekomendasi beli/jual/simpan).
+  2. *Personal Portfolio & Target Tracking* (Pencatatan aset & progres target investasi tahunan).
+  3. *Historical Appreciation & Metric Analysis* (Perhitungan kenaikan persentase nilai emas YoY & ROI).
+  4. *Parametric Investment Projection Engine* (Simulasi nilai investasi 3, 5, 10 tahun berbasis CAGR, skenario pasar, dan rutinitas tabungan).
+  5. *Temporal Durable Workflows* (Polling harga emas multi-vendor tanpa gagal, notifikasi terjadwal, alur asinkronus).
+  6. *Grounded RAG Intelligence* (Injeksi konteks pasar faktual dan portofolio terisolasi via `pgvector` ke prompt Gemini guna mencegah halusinasi).
+  7. *Human-in-the-Loop Safeguard* (AI hanya memberi analisis & opsi aksi; pengguna mengeksekusi keputusan jual/beli secara mandiri).
+
+### B. Diagram Alur & Keamanan Proyek `lisa` (Format Mermaid untuk Draw.io)
+
+```mermaid
+graph TD
+    UserLisa[User Telegram / Web Dashboard] -->|1. Request Portfolio / Simulasi Proyeksi 3-5-10 Thn| LisaBackend[Lisa Backend Service]
+    LisaBackend -->|2. Verify user_id / telegram_id| LisaDB[(Lisa PostgreSQL DB + pgvector)]
+    LisaDB -->|3. Fetch Portfolio Data, Target Tahunan & Parameters| LisaBackend
+    
+    LisaBackend <-->|Durable Background Sync / Cron| TemporalLisa[Temporal Workflow Engine<br/>Price Polling & Target Evaluator]
+    
+    LisaBackend -->|4. Query Semantic Market Context| RAGLisa[RAG Engine<br/>Market News & Trends Embeddings]
+    RAGLisa -->|5. Enriched Domain Context| LisaBackend
+    
+    LisaBackend -->|6. Safe Context + Prompt Injection| AIOrch[AI Orchestration Layer<br/>Guardrail & Context Engine]
+    AIOrch -->|7. Sanitized Prompt| Gemini[Google Gemini API]
+    Gemini -->|8. Market & Projection Insights| AIOrch
+    AIOrch -->|9. Verified Safe Response| LisaBackend
+    LisaBackend -->|10. Response Visual Chart / Text to User| UserLisa
+    UserLisa -.->|11. HITL: User Decides & Executes Buy/Sell Manually| LisaBackend
+
+    style Gemini fill:#f9f,stroke:#333,stroke-width:2px
+    style AIOrch fill:#ffd,stroke:#333,stroke-width:2px
+    style TemporalLisa fill:#dfd,stroke:#333,stroke-width:1px
+    style LisaDB fill:#bbf,stroke:#333,stroke-width:1px
+
+```
+
+---
+
+## 2.2. Master Context Proyek `catetin` (POS SaaS Multi-Tenant & Smart Inventory)
+
+### A. Tech Stack Spesifik `catetin`
+
+* **Backend:** Node.js (NestJS / Express) atau Python (FastAPI) + `temporalio` SDK + *Multi-Tenant Middleware*
+* **Frontend:** React / Next.js + Tailwind CSS + komponen tabel/kasir interaktif
+* **Database & RAG:** PostgreSQL (`catetin_db` dengan pemisahan `tenant_id` / *Row-Level Security* + ekstensi `pgvector` untuk RAG katalog & histori transaksi)
+* **Workflow Engine:** Temporal.io (Rekap penjualan harian/mingguan otomatis, alert stok menipis berkala, sinkronisasi transaksi toko)
+* **Core Capabilities:**
+  1. *Multi-Tenant POS & Transaction Engine* (Pencatatan kasir dan penjualan harian terisolasi).
+  2. *Smart Inventory & Reorder Insights* (Deteksi stok menipis dan rekomendasi restock berbasis AI).
+  3. *Temporal Scheduled Analytics & Alerts* (Workflow otomatis rekap transaksi toko dan evaluasi batas aman inventaris).
+  4. *Tenant-Isolated RAG Engine* (Injeksi konteks katalog produk dan riwayat penjualan spesifik tenant via `pgvector` ke Gemini API).
+  5. *Human-in-the-Loop Safeguard* (AI menyajikan rekomendasi stok/harga; kasir atau pemilik toko wajib menyetujui secara manual).
+
+### B. Diagram Alur & Isolasi Tenant Proyek `catetin` (Format Mermaid untuk Draw.io)
+
+```mermaid
+graph TD
+    TenantA[Tenant A: Cashier / Manager] -->|1. Request Inventory Insights / Restock Suggestion| CatetinBackend[Catetin SaaS Backend]
+    TenantB[Tenant B: Cashier / Manager] -->|1. Request Inventory Insights / Restock Suggestion| CatetinBackend
+    
+    CatetinBackend -->|2. Enforce strict WHERE tenant_id = X| CatetinDB[(Catetin Multi-Tenant DB + pgvector)]
+    CatetinDB -->|3. Return Isolated Tenant Data| CatetinBackend
+    
+    CatetinBackend <-->|Durable Cron & Restock Alerts| TemporalCatetin[Temporal Workflow Engine<br/>Daily Sales Recap & Stock Monitor]
+    
+    CatetinBackend -->|4. Retrieve Tenant-Specific Knowledge| RAGCatetin[Tenant-Isolated RAG<br/>Product Catalog & Sales History]
+    RAGCatetin -->|5. Isolated Domain Context| CatetinBackend
+
+    CatetinBackend -->|6. Tenant Context + Guardrail| AIOrch[AI Orchestration Layer<br/>Guardrail & Context Engine]
+    AIOrch -->|7. Guardrailed Prompt| Gemini[Google Gemini API]
+    Gemini -->|8. Inventory & Sales Insights| AIOrch
+    AIOrch -->|9. Filtered Safe Response| CatetinBackend
+    
+    CatetinBackend -->|10. Strict Data Separation Response| TenantA
+    CatetinBackend -->|10. Strict Data Separation Response| TenantB
+
+    TenantA -.->|11. HITL: Manager Approves Restock / Price Changes Manually| CatetinBackend
+    TenantB -.->|11. HITL: Manager Approves Restock / Price Changes Manually| CatetinBackend
+
+    style Gemini fill:#f9f,stroke:#333,stroke-width:2px
+    style AIOrch fill:#ffd,stroke:#333,stroke-width:2px
+    style TemporalCatetin fill:#dfd,stroke:#333,stroke-width:1px
+    style CatetinDB fill:#bbf,stroke:#333,stroke-width:1px
+
+```
